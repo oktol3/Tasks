@@ -1,6 +1,5 @@
 #include <stdio.h>
 
-
 /**
  * @return Ввод данных типа double
  * @return Введенное значение
