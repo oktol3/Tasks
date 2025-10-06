@@ -25,7 +25,7 @@ int main()
 	const double N = value();
 	checkValue(N);
 	printf("S = %.2lf\n", (N / 100.0) * A * A);
-	printf("P = %.2lf\n", ((N / 100.0) * A + A))*2;
+	printf("P = %.2lf\n", ((N / 100.0) * A + A)*2);
 }
 
 double value()
