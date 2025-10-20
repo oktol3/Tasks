@@ -22,7 +22,7 @@ int main()
 	printf("A = ");
 	const double A = value();
 	checkValue(A);
-	printf("S = ");
+	printf("N = ");
 	const double N = value();
 	checkValue(N);
 	printf("S = %.2lf\n", (N / 100.0) * A * A);
