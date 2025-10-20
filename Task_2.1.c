@@ -35,6 +35,7 @@ int main()
 	CheckValue(R);
 	printf("V =%.2lf\n", GetV(R));
 	printf("S =%.2lf\n", GetS(R));
+	return 0;
 }
 
 double Value()
