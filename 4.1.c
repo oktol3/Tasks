@@ -27,7 +27,7 @@ void fillArray(int* arr, const size_t size);
  */
 void fillRandom(int* arr, const size_t size);
 /**
- * @breif Вовод массива 
+ * @breif Вовод массива
  * @param Массив
  * @param Размер массива
  */
@@ -46,15 +46,23 @@ void printBiggerA(int* arr, const size_t size, const int A);
  */
 void replaceMaxNegative(int* arr, const size_t size);
 /**
- * @breif Суммирование нечетных эллементов 
+ * @breif Суммирование нечетных эллементов
  * @param Массив
  * @param Размер массива
  * @return Сумма нечетных эллементов
  */
 int sumOddNumber(int* arr, const size_t size);
 
-enum {RANDOM = 1, MANUAL};
-
+/**
+ * @breif константы
+ * @param RANDOM = 1
+ * @param MANUAL = 2
+ */
+enum { RANDOM = 1, MANUAL };
+/**
+ * @breif точка входа
+ * @return 0, если программа завершена успешно
+ */
 int main()
 {
 	printf("enter size ");
@@ -62,7 +70,7 @@ int main()
 	int* arr = malloc(size * sizeof(int));
 	printf("%d random %d manual ", RANDOM, MANUAL);
 	int choice = Value();
-	switch(choice)
+	switch (choice)
 	{
 	case RANDOM:
 
@@ -81,11 +89,11 @@ int main()
 	printf("\n%d", sumOddNumber(arr, size));
 	printf("\nenter A = ");
 	const int A = Value();
-	
 	printBiggerA(arr, size, A);
-	replaceMaxNegative(arr, size);
+	int* copyArr = arr;
+	replaceMaxNegative(copyArr, size);
 	printf("\n");
-	printArray(arr, size);
+	printArray(copyArr, size);
 	free(arr);
 	return 0;
 }
@@ -108,18 +116,18 @@ size_t getSize()
 	{
 		printf("ERROR");
 		abort();
-		
+
 	}
 	return (size_t)value;
 }
-	
+
 void fillArray(int* arr, const size_t size)
 {
 	for (size_t i = 0; i < size; i++)
 	{
 		printf("enter arr[%d] = ", i);
 		arr[i] = Value();
-		
+
 	}
 }
 
@@ -162,7 +170,7 @@ void printBiggerA(int* arr, const size_t size, const int A)
 
 	for (int i = 0; i < size; i++)
 	{
-		if (arr[i]>A)
+		if (arr[i] > A)
 		{
 			printf("%d ", i);
 		}
