@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <float.h>
 
 /**
  * @breif Рассчет кинетической энергии
@@ -49,7 +50,7 @@ double Value()
 
 void checkPositive(const double m)
 {
-	if (!(m > 0))
+	if (!(m-DBL_EPSILON > 0))
 	{
 		printf("error: m not positive");
 		exit(1);
