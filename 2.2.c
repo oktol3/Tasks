@@ -23,9 +23,9 @@ double function(const int a, const int x);
 
 int main()
 {
-	const float a = 2.5;
+	const double a = 2.5;
     printf("Enter x ");
-    const float x = getValue();
+    const double x = getValue();
 	printf("function = %.2lf", function(x, a));
 	return 0;
 }
@@ -45,7 +45,7 @@ double getValue()
 double function(const int a, const int x)
 {
 
-    if (fabs(x - a) < DBL_EPSILON || x < a)
+    if (!(x>a))
     {
         return x * sin(a) * x;
     }
