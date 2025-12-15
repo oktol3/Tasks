@@ -31,14 +31,14 @@ void fillRandom(int* arr, const size_t size);
  * @param Массив
  * @param Размер массива
  */
-void printArray(int* arr, const size_t size);
+void printArray(const int* arr, const size_t size);
 /**
  * @breif Вывод индексов эллементов массив большех чем А
  * @param Массив
  * @param Размер массива
  * @param А
  */
-void printBiggerA(int* arr, const size_t size, const int A);
+void printBiggerA(const int* arr, const size_t size, const int A);
 /**
  * @breif Замена 2-го элемента массива на наибольший максимальный отрицательный эллемент
  * @param Массив
@@ -46,12 +46,18 @@ void printBiggerA(int* arr, const size_t size, const int A);
  */
 void replaceMaxNegative(int* arr, const size_t size);
 /**
+ * @breif Нахождение индекса наибольший максимальный отрицательный эллемент
+ * @param Массив
+ * @param Размер массива
+ */
+void findFirstNegative(const int* arr, const size_t size);
+/**
  * @breif Суммирование нечетных эллементов
  * @param Массив
  * @param Размер массива
  * @return Сумма нечетных эллементов
  */
-int sumOddNumber(int* arr, const size_t size);
+int sumOddNumber(const int* arr, const size_t size);
 
 /**
  * @breif константы
@@ -68,6 +74,11 @@ int main()
 	printf("enter size ");
 	size_t size = getSize();
 	int* arr = malloc(size * sizeof(int));
+	if (arr=NULL)
+	{
+		print("ERROR");
+		exit(1);
+	}
 	printf("%d random %d manual ", RANDOM, MANUAL);
 	int choice = Value();
 	switch (choice)
@@ -138,13 +149,18 @@ void fillRandom(int* arr, const size_t size)
 	int start = Value();
 	printf("diapozon end ");
 	int end = Value();
+	if (!(end > start))
+	{
+		printf("ERROR");
+		exit(1);
+	}
 	for (size_t i = 0; i < size; i++)
 	{
 		arr[i] = (rand() % (end - start + 1)) + start;
 	}
 }
 
-void printArray(int* arr, const size_t size)
+void printArray(const int* arr, const size_t size)
 {
 	for (size_t i = 0; i < size; i++)
 	{
@@ -152,7 +168,7 @@ void printArray(int* arr, const size_t size)
 	}
 }
 
-int sumOddNumber(int* arr, const size_t size)
+int sumOddNumber(const int* arr, const size_t size)
 {
 	int result = 0;
 	for (size_t i = 0; i < size; i++)
@@ -165,7 +181,7 @@ int sumOddNumber(int* arr, const size_t size)
 	return result;
 }
 
-void printBiggerA(int* arr, const size_t size, const int A)
+void printBiggerA(const int* arr, const size_t size, const int A)
 {
 
 	for (int i = 0; i < size; i++)
@@ -179,6 +195,11 @@ void printBiggerA(int* arr, const size_t size, const int A)
 
 void replaceMaxNegative(int* arr, const size_t size)
 {
+	const int a = findFirstNegative(arr, size);
+	arr[2] = a;
+}
+void findFirstNegative(const int* arr, const size_t size)
+{	
 	int a = 0;
 	for (int i = 0; i < size; i++)
 	{
@@ -187,5 +208,5 @@ void replaceMaxNegative(int* arr, const size_t size)
 			a = arr[i];
 		}
 	}
-	arr[2] = a;
+	return a
 }
