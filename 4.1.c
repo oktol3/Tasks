@@ -50,7 +50,7 @@ void replaceMaxNegative(int* arr, const size_t size);
  * @param Массив
  * @param Размер массива
  */
-int findFirstNegative(const int* arr, const size_t size);
+size_t findMaxNegative(const int* arr, const size_t size);
 /**
  * @breif Суммирование нечетных эллементов
  * @param Массив
@@ -99,6 +99,7 @@ int main()
 	const int A = Value();
 	printBiggerA(arr, size, A);
 	int* copyArr = get_arr(size);
+	copyArr = arr;
 	replaceMaxNegative(copyArr, size);
 	printf("\n");
 	printArray(copyArr, size);
@@ -203,15 +204,30 @@ void printBiggerA(const int* arr, const size_t size, const int A)
 
 void replaceMaxNegative(int* arr, const size_t size)
 {
-	arr[2] = arr[findFirstNegative(arr, size);
+	arr[2] = findMaxNegative(arr, size);
 }
-int findFirstNegative(const int* arr, const size_t size)
+size_t findMaxNegative(const int* arr, const size_t size)
 {
+	int a = 0;
 	for (size_t i = 0; i < size; i++)
 	{
-		if (arr[i] < 0)
+		if (arr[i] < a)
 		{
-			return i;
+			a = arr[i];
 		}
 	}
+	if (a == 0)
+	{
+		return arr[2];
+	}
+	int b = a - 1;
+
+	for (size_t i = 0; i < size; i++)
+	{
+		if (arr[i] < 0 && arr[i]>a)
+		{
+			b = arr[i];
+		}
+	}
+	return b;
 }
