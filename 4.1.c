@@ -59,6 +59,8 @@ int findFirstNegative(const int* arr, const size_t size);
  */
 int sumOddNumber(const int* arr, const size_t size);
 
+int* get_arr(const size_t size);
+
 /**
  * @breif константы
  * @param RANDOM = 1
@@ -73,12 +75,7 @@ int main()
 {
 	printf("enter size ");
 	size_t size = getSize();
-	int* arr = malloc(size * sizeof(int));
-	if (arr == NULL)
-	{
-		printf("ERROR");
-		exit(1);
-	}
+	int* arr = get_arr(size);
 	printf("%d random %d manual ", RANDOM, MANUAL);
 	int choice = Value();
 	switch (choice)
@@ -92,6 +89,7 @@ int main()
 	default:
 		printf("error");
 		free(arr);
+		exit(1);
 		break;
 	}
 
@@ -100,12 +98,23 @@ int main()
 	printf("\nenter A = ");
 	const int A = Value();
 	printBiggerA(arr, size, A);
-	int* copyArr = arr;
+	int* copyArr = get_arr(size);
 	replaceMaxNegative(copyArr, size);
 	printf("\n");
 	printArray(copyArr, size);
 	free(arr);
 	return 0;
+}
+
+int* get_arr(const size_t size)
+{
+	int* arr = malloc(size * sizeof(int));
+	if (arr == NULL)
+	{
+		printf("ERROR");
+		exit(1);
+	}
+	return arr;
 }
 
 int Value()
@@ -183,7 +192,7 @@ int sumOddNumber(const int* arr, const size_t size)
 void printBiggerA(const int* arr, const size_t size, const int A)
 {
 
-	for (int i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		if (arr[i] > A)
 		{
@@ -194,17 +203,15 @@ void printBiggerA(const int* arr, const size_t size, const int A)
 
 void replaceMaxNegative(int* arr, const size_t size)
 {
-	arr[2] = findFirstNegative(arr, size);
+	arr[2] = arr[findFirstNegative(arr, size);
 }
 int findFirstNegative(const int* arr, const size_t size)
 {
-	int a = 0;
 	for (size_t i = 0; i < size; i++)
 	{
-		if (arr[i] < a)
+		if (arr[i] < 0)
 		{
-			a = arr[i];
+			return i;
 		}
 	}
-	return a;
 }
