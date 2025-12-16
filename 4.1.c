@@ -33,7 +33,7 @@ void fillRandom(int* arr, const size_t size);
  */
 void printArray(const int* arr, const size_t size);
 /**
- * @breif Вывод индексов эллементов массив большех чем А
+ * @breif Вывод индексов эллементов массив больших чем А
  * @param Массив
  * @param Размер массива
  * @param А
@@ -50,7 +50,7 @@ void replaceMaxNegative(int* arr, const size_t size);
  * @param Массив
  * @param Размер массива
  */
-void findFirstNegative(const int* arr, const size_t size);
+int findFirstNegative(const int* arr, const size_t size);
 /**
  * @breif Суммирование нечетных эллементов
  * @param Массив
@@ -74,9 +74,9 @@ int main()
 	printf("enter size ");
 	size_t size = getSize();
 	int* arr = malloc(size * sizeof(int));
-	if (arr=NULL)
+	if (arr == NULL)
 	{
-		print("ERROR");
+		printf("ERROR");
 		exit(1);
 	}
 	printf("%d random %d manual ", RANDOM, MANUAL);
@@ -84,7 +84,6 @@ int main()
 	switch (choice)
 	{
 	case RANDOM:
-
 		fillRandom(arr, size);
 		break;
 	case MANUAL:
@@ -195,18 +194,17 @@ void printBiggerA(const int* arr, const size_t size, const int A)
 
 void replaceMaxNegative(int* arr, const size_t size)
 {
-	const int a = findFirstNegative(arr, size);
-	arr[2] = a;
+	arr[2] = findFirstNegative(arr, size);
 }
-void findFirstNegative(const int* arr, const size_t size)
-{	
+int findFirstNegative(const int* arr, const size_t size)
+{
 	int a = 0;
-	for (int i = 0; i < size; i++)
+	for (size_t i = 0; i < size; i++)
 	{
 		if (arr[i] < a)
 		{
 			a = arr[i];
 		}
 	}
-	return a
+	return a;
 }
