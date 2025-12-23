@@ -50,7 +50,7 @@ void replaceMaxNegative(int* arr, const size_t size);
  * @param Массив
  * @param Размер массива
  */
-size_t findMaxNegative(const int* arr, const size_t size);
+size_t findFirstNegative(const int* arr, const size_t size);
 /**
  * @breif Суммирование нечетных эллементов
  * @param Массив
@@ -59,7 +59,7 @@ size_t findMaxNegative(const int* arr, const size_t size);
  */
 int sumOddNumber(const int* arr, const size_t size);
 
-int* get_arr(const size_t size);
+void checking_memory(const int* arr, const size_t size);
 
 /**
  * @breif константы
@@ -75,7 +75,8 @@ int main()
 {
 	printf("enter size ");
 	size_t size = getSize();
-	int* arr = get_arr(size);
+	int* arr = malloc(size * sizeof(int));
+	checking_memory(arr, size);
 	printf("%d random %d manual ", RANDOM, MANUAL);
 	int choice = Value();
 	switch (choice)
@@ -99,6 +100,7 @@ int main()
 	const int A = Value();
 	printBiggerA(arr, size, A);
 	int* copyArr = get_arr(size);
+	checking_memory(copyArr, size);
 	copyArr = arr;
 	replaceMaxNegative(copyArr, size);
 	printf("\n");
@@ -107,15 +109,13 @@ int main()
 	return 0;
 }
 
-int* get_arr(const size_t size)
+void checking_memory(const int* arr, const size_t size)
 {
-	int* arr = malloc(size * sizeof(int));
 	if (arr == NULL)
 	{
 		printf("ERROR");
 		exit(1);
 	}
-	return arr;
 }
 
 int Value()
@@ -143,6 +143,7 @@ size_t getSize()
 
 void fillArray(int* arr, const size_t size)
 {
+	checking_memory(arr, size);
 	for (size_t i = 0; i < size; i++)
 	{
 		printf("enter arr[%d] = ", i);
@@ -153,6 +154,7 @@ void fillArray(int* arr, const size_t size)
 
 void fillRandom(int* arr, const size_t size)
 {
+	checking_memory(arr, size);
 	srand(time(NULL));
 	printf("diapozon start ");
 	int start = Value();
@@ -171,6 +173,7 @@ void fillRandom(int* arr, const size_t size)
 
 void printArray(const int* arr, const size_t size)
 {
+	checking_memory(arr, size);
 	for (size_t i = 0; i < size; i++)
 	{
 		printf("%d ", arr[i]);
@@ -179,6 +182,7 @@ void printArray(const int* arr, const size_t size)
 
 int sumOddNumber(const int* arr, const size_t size)
 {
+	checking_memory(arr, size);
 	int result = 0;
 	for (size_t i = 0; i < size; i++)
 	{
@@ -192,7 +196,7 @@ int sumOddNumber(const int* arr, const size_t size)
 
 void printBiggerA(const int* arr, const size_t size, const int A)
 {
-
+	checking_memory(arr, size);
 	for (size_t i = 0; i < size; i++)
 	{
 		if (arr[i] > A)
@@ -204,30 +208,34 @@ void printBiggerA(const int* arr, const size_t size, const int A)
 
 void replaceMaxNegative(int* arr, const size_t size)
 {
-	arr[2] = findMaxNegative(arr, size);
-}
-size_t findMaxNegative(const int* arr, const size_t size)
-{
-	int a = 0;
+	checking_memory(arr, size);
+	int a = findFirstNegative(arr, size);
+	
+	if (a == -1)
+	{
+		printf("\nNot find negative");
+		exit(1);
+	}
+	int b = arr[a];
 	for (size_t i = 0; i < size; i++)
 	{
-		if (arr[i] < a)
-		{
-			a = arr[i];
-		}
-	}
-	if (a == 0)
-	{
-		return arr[2];
-	}
-	int b = a - 1;
-
-	for (size_t i = 0; i < size; i++)
-	{
-		if (arr[i] < 0 && arr[i]>a)
+		if (arr[i] < b && arr[i] > b)
 		{
 			b = arr[i];
 		}
 	}
-	return b;
+	arr[2] = b;
+
+}
+size_t findFirstNegative(const int* arr, const size_t size)
+{
+	checking_memory(arr, size);
+	for (size_t i = 0; i < size; i++)
+	{
+		if (arr[i] < 0)
+		{
+			return i;
+		}
+	}
+	return -1;
 }
