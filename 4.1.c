@@ -46,9 +46,10 @@ void printBiggerA(const int* arr, const size_t size, const int A);
  */
 void replaceMaxNegative(int* arr, const size_t size);
 /**
- * @breif Нахождение индекса наибольший максимальный отрицательный эллемент
+ * @breif Нахождение индекса первого отрицательного числа
  * @param Массив
  * @param Размер массива
+ * @return если найден, то индекс 1-го отрицательного, если нет, то -1
  */
 size_t findFirstNegative(const int* arr, const size_t size);
 /**
@@ -58,7 +59,11 @@ size_t findFirstNegative(const int* arr, const size_t size);
  * @return Сумма нечетных эллементов
  */
 int sumOddNumber(const int* arr, const size_t size);
-
+/**
+ * @breif Проверка, того, что память выделена, не NULL
+ * @param Массив
+ * @param Размер массива
+ */
 void checking_memory(const int* arr, const size_t size);
 
 /**
