@@ -95,12 +95,11 @@ int main()
     int* copyArr = copyArray(arr, size);
     replaceMaxNegative(copyArr, size);
     printArray(copyArr, size);
-
+    int* copyArr = copyArray(arr, size);
     InsertK(copyArr, size);
 
 
     NewArrayA(copyArr, size);
-
 
     free(copyArr);
     free(arr);
@@ -130,6 +129,7 @@ int Value()
 
 size_t getSize(char* message)
 {
+    checking_memory(message);
     printf("%s", message);
     int value = Value();
     if (value <= 0)
