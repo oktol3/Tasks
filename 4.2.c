@@ -1,3 +1,8 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#include<float.h>
+#include<stdbool.h>
 /**
  * @brief Заполняет массив случайными числами в пределах введённого пользователем диапазона
  * @param arr массив
