@@ -100,6 +100,7 @@ int main()
     int* copyArr = copyArray(arr, size);
     replaceMaxNegative(copyArr, size);
     printArray(copyArr, size);
+    free(copyArr);
     int* copyArr = copyArray(arr, size);
     InsertK(copyArr, size);
 
