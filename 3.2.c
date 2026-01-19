@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <float.h>
+#include <math.h>
+
 
 /**
  * @breif ручной ввод значений
