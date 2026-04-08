@@ -2,16 +2,7 @@
 #include "pyramid.h"
 #include <math.h>
 #include <float.h>
-/**
- * @breaf рассчет объема по 4 точкам
- *
- * @param A - точка A
- * @param B - точка B
- * @param C - точка C
- * @param D - точка D
- * @return Объем паралепипеда по 3 векторам
- */
-double getV(const point& A, const point& B, const point& C, const point& D);
+
 /**
  * @breaf рассчет площадь треугольника по 4 точкам
  *
