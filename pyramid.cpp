@@ -25,7 +25,7 @@ double pyramid::square()
     return getS(D, A, B) + getS(D, B, C) + getS(D, C, A);
 }
 
-double getV(const point& A, const point& B, const point& C, const point& D)
+double getV()
 {
     //|B.x() - A.x()  B.y() - A.y()  B.z() - A.z()|
     //|C.x() - A.x()  C.y() - A.y()  C.z() - A.z()| - 3 объемa пирамиды
