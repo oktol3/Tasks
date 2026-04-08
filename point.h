@@ -4,8 +4,17 @@
 **/
 class point {
 private:
+    /**
+        @brief переменная x
+    **/
     double x1;
+    /**
+        @brief переменная y
+    **/
     double y1;
+    /**
+        @brief переменная z
+    **/
     double z1;
 public:
     /**
