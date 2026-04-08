@@ -3,22 +3,22 @@
 #include <math.h>
 #include <float.h>
 /**
- * @breaf рассчет объема по 4 точкам
+ * @breaf СЂР°СЃСЃС‡РµС‚ РѕР±СЉРµРјР° РїРѕ 4 С‚РѕС‡РєР°Рј
  *
- * @param A - точка A
- * @param B - точка B
- * @param C - точка C
- * @param D - точка D
- * @return Объем паралепипеда по 3 векторам
+ * @param A - С‚РѕС‡РєР° A
+ * @param B - С‚РѕС‡РєР° B
+ * @param C - С‚РѕС‡РєР° C
+ * @param D - С‚РѕС‡РєР° D
+ * @return РћР±СЉРµРј РїР°СЂР°Р»РµРїРёРїРµРґР° РїРѕ 3 РІРµРєС‚РѕСЂР°Рј
  */
 double getV(const point& A, const point& B, const point& C, const point& D);
 /**
- * @breaf рассчет площадь треугольника по 4 точкам
+ * @breaf СЂР°СЃСЃС‡РµС‚ РїР»РѕС‰Р°РґСЊ С‚СЂРµСѓРіРѕР»СЊРЅРёРєР° РїРѕ 4 С‚РѕС‡РєР°Рј
  *
- * @param X - точка X
- * @param Y - точка Y
- * @param Z - точка Z
- * @return площадь треугольника по 2 векторам
+ * @param X - С‚РѕС‡РєР° X
+ * @param Y - С‚РѕС‡РєР° Y
+ * @param Z - С‚РѕС‡РєР° Z
+ * @return РїР»РѕС‰Р°РґСЊ С‚СЂРµСѓРіРѕР»СЊРЅРёРєР° РїРѕ 2 РІРµРєС‚РѕСЂР°Рј
  */
 double getS(const point& X, const point& Y, const point& Z);
 
@@ -47,7 +47,7 @@ double pyramid::square()
 double getV(const point& A, const point& B, const point& C, const point& D)
 {
     //|B.x() - A.x()  B.y() - A.y()  B.z() - A.z()|
-    //|C.x() - A.x()  C.y() - A.y()  C.z() - A.z()| - 3 объемa пирамиды
+    //|C.x() - A.x()  C.y() - A.y()  C.z() - A.z()| - 3 РѕР±СЉРµРјa РїРёСЂР°РјРёРґС‹
     //|D.x() - A.x()  D.y() - A.y()  D.z() - A.z()|
 
     return abs((B.x() - A.x()) * (C.y() - A.y()) * (D.z() - A.z())
@@ -60,7 +60,7 @@ double getV(const point& A, const point& B, const point& C, const point& D)
 
 double getS(const point& X, const point& Y, const point& Z)
 {
-    // S = |[вектор A * вектор B]| / 2
+    // S = |[РІРµРєС‚РѕСЂ A * РІРµРєС‚РѕСЂ B]| / 2
     // A = ((x2 - x1), (y2 - y1), (z2 - z1))
     // B = ((x3 - x1), (y3 - y1), (z3 - z1))
     // 
