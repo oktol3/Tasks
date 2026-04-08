@@ -5,7 +5,7 @@
 
 pyramid::pyramid(const point& A, const point& B, const point& C, const point& D) :A(A), B(B), C(C), D(D)
 {
-    if ((abs(getV(A, B, C, D)) - DBL_EPSILON) < 0)
+    if ((abs(getV()) - DBL_EPSILON) < 0)
     {
         std::cout << "error" << std::endl;
         exit(2);
@@ -17,7 +17,7 @@ double pyramid::getH()
     // 1/3 * S * h = V
     // h = 3V/S
 
-    return getV(A, B, C, D) / getS(A, B, C);
+    return getV() / getS(A, B, C);
 }
 
 double pyramid::square()
