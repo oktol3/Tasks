@@ -2,8 +2,24 @@
 #include "pyramid.h"
 #include <math.h>
 #include <float.h>
-
+/**
+ * @breaf рассчет объема по 4 точкам
+ *
+ * @param A - точка A
+ * @param B - точка B
+ * @param C - точка C
+ * @param D - точка D
+ * @return Объем паралепипеда по 3 векторам
+ */
 double getV(const point& A, const point& B, const point& C, const point& D);
+/**
+ * @breaf рассчет площадь треугольника по 4 точкам
+ *
+ * @param X - точка X
+ * @param Y - точка Y
+ * @param Z - точка Z
+ * @return площадь треугольника по 2 векторам
+ */
 double getS(const point& X, const point& Y, const point& Z);
 
 pyramid::pyramid(const point& A, const point& B, const point& C, const point& D) :A(A), B(B), C(C), D(D)
