@@ -5,9 +5,31 @@
 **/
 class pyramid {
 private:
+    /**
+         * @breaf рассчет объема по 4 точкам
+         *
+         * @param A - точка A
+         * @param B - точка B
+         * @param C - точка C
+         * @param D - точка D
+         * @return Объем паралепипеда по 3 векторам
+     */
+    double getV(const point& A, const point& B, const point& C, const point& D);
+    /**
+         @breif точка A
+    **/
     point A;
+    /**
+         @breif точка B
+    **/
     point B;
+    /**
+         @breif точка C
+    **/
     point C;
+    /**
+         @breif точка D
+    **/
     point D;
 
 public:
