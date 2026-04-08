@@ -1,7 +1,7 @@
 #pragma once
 #include "point.h"
 /**
-    @brief   класс пирамида
+    @brief   РєР»Р°СЃСЃ РїРёСЂР°РјРёРґР°
 **/
 class pyramid {
 private:
@@ -12,21 +12,21 @@ private:
 
 public:
     /**
-        @brief конструктор
-        @param A - точка A
-        @param B - точка B
-        @param C - точка C
-        @param D - точка D
+        @brief РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+        @param A - С‚РѕС‡РєР° A
+        @param B - С‚РѕС‡РєР° B
+        @param C - С‚РѕС‡РєР° C
+        @param D - С‚РѕС‡РєР° D
     **/
     pyramid(const point& A, const point& B, const point& C, const point& D);
     /**
-        @brief рассчет высоты тэтрайдера
-        @return рассчитанное значение
+        @brief СЂР°СЃСЃС‡РµС‚ РІС‹СЃРѕС‚С‹ С‚СЌС‚СЂР°Р№РґРµСЂР°
+        @return СЂР°СЃСЃС‡РёС‚Р°РЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
     **/
     double getH();
     /**
-        @brief рассчет площади боковой поверхности
-        @return рассчитанное значение
+        @brief СЂР°СЃСЃС‡РµС‚ РїР»РѕС‰Р°РґРё Р±РѕРєРѕРІРѕР№ РїРѕРІРµСЂС…РЅРѕСЃС‚Рё
+        @return СЂР°СЃСЃС‡РёС‚Р°РЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ
     **/
     double square();
 };
