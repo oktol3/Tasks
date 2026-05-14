@@ -39,5 +39,15 @@ public:
      * @return - координата z
      */
     double z() const;
-
+    /**
+     * @breif переместить координату точки по оси x
+     * @param add - на сколько переместить коордтнату
+     */
+    void move(const double z, const double y, const double x);
+    /**
+        @breid сравнение точек, равны или нет
+        @param точка с которой сравниваем
+        @return True или False
+    **/
+    bool equally(const point point);
 };
