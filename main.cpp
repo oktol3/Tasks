@@ -19,7 +19,7 @@
 point getPoint();
 
 /**
- * @breif Получить вещественное число 
+ * @breif Получить вещественное число
  * @retutn вещественное число
  */
 double getA();
@@ -42,7 +42,7 @@ int main()
     vector RS(R, S);
     std::cout << "OP (" << OP.i() << "; " << OP.j() << "; " << OP.k() << " )" << std::endl;
     std::cout << "RS (" << RS.i() << "; " << RS.j() << "; " << RS.k() << " )" << std::endl;
-    if (OP.equally(RS))
+    if (OP.operator==(RS))
     {
         std::cout << "The vectors are equal" << std::endl;
     }
@@ -50,12 +50,12 @@ int main()
     {
         std::cout << "The vectors are not equal" << std::endl;
     }
-    vector OP_plus_RS = OP.addition(RS);
+    vector OP_plus_RS = OP.operator+(RS);
     std::cout << "OP + RS (" << OP_plus_RS.i() << "; " << OP_plus_RS.j() << "; " << OP_plus_RS.k() << " )" << std::endl;
 
-    vector OP_minus_RS = OP.subtraction(RS);
+    vector OP_minus_RS = OP.operator-(RS);
     std::cout << "OP - RS (" << OP_minus_RS.i() << "; " << OP_minus_RS.j() << "; " << OP_minus_RS.k() << " )" << std::endl;
-    
+
     std::cout << "move O by x, y, z" << std::endl;
     O.move(getA(), getA(), getA());
     std::cout << "move P by x, y, z" << std::endl;
