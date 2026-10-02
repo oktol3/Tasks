@@ -1,4 +1,4 @@
-﻿#include "CppUnitTest.h"
+#include "CppUnitTest.h"
 
 #include "../ConsoleApplication18/Matrix.h"
 #include "../ConsoleApplication18/RandomGenerator.h"
