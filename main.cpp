@@ -4,10 +4,21 @@
 #include "Matrix.h"
 #include "RandomGenerator.h"
 #include "IStreamGenerator.h"
+#include "ConstGenerator.h"
 #include "Task1.h"
 #include "Task2.h"
 
 using namespace miit::algebra;
+
+/**
+ * @brief Способ заполнения матрицы
+ */
+enum class Choice
+{
+    Random = 1,     //случайными числами
+    Keyboard = 2,   //с клавиатуры
+    Constant = 3    //константным значением
+};
 
 /**
  * @brief Точка входа в демонстрационную программу
@@ -21,30 +32,53 @@ int main()
     std::cout << "Введите размеры матрицы n m: ";
     std::cin >> n >> m;
 
-    Matrix<int> matrix(n, m);
-
-    std::cout << "Выберите способ заполнения:\n"
-        << "1 - случайными числами\n"
-        << "2 - с клавиатуры\n"
+    std::cout << "Выберите способ заполнения:\n" 
+        << Choice::Random
+        << " - случайными числами\n"
+        << Choice::Keyboard
+        << " - с клавиатуры\n"
+        << Choice::Constant
+        << "3 - константным значением\n"
         << "Ваш выбор: ";
-    int choice = 0;
-    std::cin >> choice;
+
+    int input = 0;
+    std::cin >> input;
+    Choice choice = static_cast<Choice>(input);
 
     std::unique_ptr<Generator> gen;
-    if (choice == 1)
+
+    switch (choice)
+    {
+    case Choice::Random:
     {
         int minV = 0, maxV = 0;
         std::cout << "Введите min и max: ";
         std::cin >> minV >> maxV;
-        gen = std::make_unique<RandomGenerator>(minV, maxV);
+        gen = std::unique_ptr<Generator>(new RandomGenerator(minV, maxV));
+        break;
     }
-    else
+    case Choice::Keyboard:
     {
-        gen = std::make_unique<IStreamGenerator>(std::cin);
+        gen = std::unique_ptr<Generator>(new IStreamGenerator(std::cin));
         std::cout << "Введите " << n * m << " чисел:\n";
+        break;
     }
-
-    matrix.fill(*gen);
+    case Choice::Constant:
+    {
+        int value = 0;
+        std::cout << "Введите константу: ";
+        std::cin >> value;
+        gen = std::unique_ptr<Generator>(new ConstGenerator(value));
+        break;
+    }
+    default:
+    {
+        std::cout << "Неверный выбор\n";
+        exit(1);
+        break;
+    }
+    }
+    Matrix<int> matrix(n, m, *gen);
 
     std::cout << "\nИсходная матрица:\n" << matrix.toString() << "\n\n";
 
