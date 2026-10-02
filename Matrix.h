@@ -149,7 +149,7 @@ namespace miit
         Matrix<T>::Matrix() : rows(0), cols(0) {}
 
         template <typename T>
-        Matrix<T>::Matrix(size_t rows, size_t cols)
+        Matrix<T>::Matrix(const size_t rows, const size_t cols)
             : rows(rows), cols(cols), data(rows, std::vector<T>(cols, T{})) {
         }
 
@@ -161,7 +161,7 @@ namespace miit
         }
 
         template <typename T>
-        std::vector<T>& Matrix<T>::operator[](size_t index)
+        std::vector<T>& Matrix<T>::operator[](const size_t index)
         {
             if (index >= rows)
                 throw std::out_of_range("Matrix row index out of range");
@@ -169,7 +169,7 @@ namespace miit
         }
 
         template <typename T>
-        const std::vector<T>& Matrix<T>::operator[](size_t index) const
+        const std::vector<T>& Matrix<T>::operator[](const size_t index) const
         {
             if (index >= rows)
                 throw std::out_of_range("Matrix row index out of range");
@@ -177,7 +177,7 @@ namespace miit
         }
 
         template <typename T>
-        Matrix<T>& Matrix<T>::operator<<(size_t shift)
+        Matrix<T>& Matrix<T>::operator<<(const size_t shift)
         {
             for (size_t s = 0; s < shift && rows > 0; ++s)
             {
@@ -188,7 +188,7 @@ namespace miit
         }
 
         template <typename T>
-        Matrix<T>& Matrix<T>::operator>>(size_t shift)
+        Matrix<T>& Matrix<T>::operator>>(const size_t shift)
         {
             for (size_t s = 0; s < shift; ++s)
             {
@@ -199,7 +199,7 @@ namespace miit
         }
 
         template <typename T>
-        void Matrix<T>::fill(Generator& gen)
+        void Matrix<T>::fill(const Generator& gen)
         {
             for (size_t i = 0; i < rows; ++i)
                 for (size_t j = 0; j < cols; ++j)
@@ -225,7 +225,7 @@ namespace miit
         }
 
         template <typename T>
-        void Matrix<T>::insertRow(size_t pos, const std::vector<T>& row)
+        void Matrix<T>::insertRow(const size_t pos, const std::vector<T>& row)
         {
             if (pos >= rows) return;
             data.insert(data.begin() + pos + 1, row);
