@@ -1,21 +1,34 @@
-#include "IStreamGenerator.h"
+#pragma once
+#include "Generator.h"
+#include <iostream>
 
-/**
- * @brief  ÓÌÒÚÛÍÚÓ
- * @param in ÔÓÚÓÍ ‚‚Ó‰‡
- */
-miit::algebra::IStreamGenerator::IStreamGenerator(std::istream& in)
-    : in{ in }
+namespace miit
 {
-}
+    namespace algebra
+    {
+        /**
+         * @brief –ì–µ–Ω–µ—Ä–∞—Ç–æ—Ä –∑–Ω–∞—á–µ–Ω–∏–π –∏–∑ –ø–æ—Ç–æ–∫–∞ –≤–≤–æ–¥–∞
+         */
+        class IStreamGenerator : public Generator
+        {
+        private:
+            /**
+             * @brief –°—Å—ã–ª–∫–∞ –Ω–∞ –ø–æ—Ç–æ–∫ –≤–≤–æ–¥–∞
+             */
+            std::istream& in;
 
-/**
- * @brief —˜ËÚ‡Ú¸ Ó˜ÂÂ‰ÌÓÂ ˜ËÒÎÓ ËÁ ÔÓÚÓÍ‡
- * @return Ò˜ËÚ‡ÌÌÓÂ ˆÂÎÓÂ ˜ËÒÎÓ
- */
-int miit::algebra::IStreamGenerator::generate()
-{
-    int value = 0;
-    this->in >> value;
-    return value;
+        public:
+            /**
+             * @brief –ö–æ–Ω—Å—Ç—Ä—É–∫—Ç–æ—Ä
+             * @param in –ø–æ—Ç–æ–∫ –≤–≤–æ–¥–∞ (–ø–æ —É–º–æ–ª—á–∞–Ω–∏—é std::cin)
+             */
+            IStreamGenerator(std::istream& in = std::cin);
+
+            /**
+             * @brief –°—á–∏—Ç–∞—Ç—å –æ—á–µ—Ä–µ–¥–Ω–æ–µ —á–∏—Å–ª–æ –∏–∑ –ø–æ—Ç–æ–∫–∞
+             * @return —Å—á–∏—Ç–∞–Ω–Ω–æ–µ —Ü–µ–ª–æ–µ —á–∏—Å–ª–æ
+             */
+            int generate() override;
+        };
+    }
 }
