@@ -1,8 +1,8 @@
 #include "Task2.h"
 
 /**
- * @brief Конструктор
- * @param matrix матрица, с которой работаем
+ * @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+ * @param matrix РјР°С‚СЂРёС†Р°, СЃ РєРѕС‚РѕСЂРѕР№ СЂР°Р±РѕС‚Р°РµРј
  */
 miit::algebra::Task2::Task2(Matrix<int> matrix)
     : matrix(std::move(matrix))
@@ -10,24 +10,24 @@ miit::algebra::Task2::Task2(Matrix<int> matrix)
 }
 
 /**
- * @brief Выполнить вставку строк
+ * @brief Р’С‹РїРѕР»РЅРёС‚СЊ РІСЃС‚Р°РІРєСѓ СЃС‚СЂРѕРє
  */
 void miit::algebra::Task2::solve()
 {
     if (matrix.getRows() == 0 || matrix.getCols() == 0) return;
 
-    // 1. Находим минимальный элемент
+    // 1. РќР°С…РѕРґРёРј РјРёРЅРёРјР°Р»СЊРЅС‹Р№ СЌР»РµРјРµРЅС‚
     int minVal = matrix[0][0];
     for (size_t i = 0; i < matrix.getRows(); ++i)
         for (size_t j = 0; j < matrix.getCols(); ++j)
             if (matrix[i][j] < minVal) minVal = matrix[i][j];
 
-    // 2. Формируем строку 2, 4, 6, ... длины cols
+    // 2. Р¤РѕСЂРјРёСЂСѓРµРј СЃС‚СЂРѕРєСѓ 2, 4, 6, ... РґР»РёРЅС‹ cols
     std::vector<int> evenRow(matrix.getCols());
     for (size_t j = 0; j < matrix.getCols(); ++j)
         evenRow[j] = static_cast<int>((j + 1) * 2);
 
-    // 3. Идём с конца, чтобы вставка не сбила индексы
+    // 3. РРґС‘Рј СЃ РєРѕРЅС†Р°, С‡С‚РѕР±С‹ РІСЃС‚Р°РІРєР° РЅРµ СЃР±РёР»Р° РёРЅРґРµРєСЃС‹
     for (size_t i = matrix.getRows(); i-- > 0; )
     {
         bool hasMin = false;
@@ -47,10 +47,10 @@ void miit::algebra::Task2::solve()
 }
 
 /**
- * @brief Описание задачи
- * @return строка с описанием
+ * @brief РћРїРёСЃР°РЅРёРµ Р·Р°РґР°С‡Рё
+ * @return СЃС‚СЂРѕРєР° СЃ РѕРїРёСЃР°РЅРёРµРј
  */
 std::string miit::algebra::Task2::description() const
 {
-    return "Вставить после всех строк, содержащих минимальный элемент, строку 2, 4, 6, ...";
+    return "Р’СЃС‚Р°РІРёС‚СЊ РїРѕСЃР»Рµ РІСЃРµС… СЃС‚СЂРѕРє, СЃРѕРґРµСЂР¶Р°С‰РёС… РјРёРЅРёРјР°Р»СЊРЅС‹Р№ СЌР»РµРјРµРЅС‚, СЃС‚СЂРѕРєСѓ 2, 4, 6, ...";
 }
