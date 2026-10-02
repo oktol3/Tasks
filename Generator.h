@@ -13,7 +13,7 @@ namespace miit
             /**
              * @brief Виртуальный деструктор
              */
-            virtual ~Generator() = 0 {};
+            virtual ~Generator() = default;
 
             /**
              * @brief Сгенерировать очередное значение
