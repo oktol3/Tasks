@@ -352,7 +352,7 @@ namespace MatrixTests
         TEST_METHOD(RandomGenerator_ShouldReturnValueInRange)
         {
             RandomGenerator gen(1, 10);
-            for (int i = 0; i < 100; ++i)
+            for (size_t i = 0; i < 100; ++i)
             {
                 int v = gen.generate();
                 Assert::IsTrue(v >= 1 && v <= 10);
