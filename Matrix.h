@@ -51,7 +51,7 @@ namespace miit
              * @param cols количество столбцов
              * @param value значение для заполнения всех элементов
              */
-            Matrix(size_t rows, size_t cols, Generator& gen);
+            Matrix(const size_t rows, const size_t cols, const Generator& gen);
 
             /**
              * @brief Конструктор копирования
@@ -154,7 +154,7 @@ namespace miit
         }
 
         template <typename T>
-        Matrix<T>::Matrix(size_t rows, size_t cols, Generator& gen)
+        Matrix<T>::Matrix(const size_t rows, const size_t cols, const Generator& gen)
             : rows(rows), cols(cols), data(rows, std::vector<T>(cols, T{}))
         {
             fill(gen);
