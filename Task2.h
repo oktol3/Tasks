@@ -8,37 +8,37 @@ namespace miit
     namespace algebra
     {
         /**
-         * @brief Задача 2
+         * @brief Р—Р°РґР°С‡Р° 2
          */
         class Task2 : public Exercise
         {
         private:
             /**
-             * @brief Матрица, с которой работает задача
+             * @brief РњР°С‚СЂРёС†Р°, СЃ РєРѕС‚РѕСЂРѕР№ СЂР°Р±РѕС‚Р°РµС‚ Р·Р°РґР°С‡Р°
              */
             Matrix<int> matrix;
 
         public:
             /**
-             * @brief Конструктор
-             * @param matrix матрица, с которой работаем
+             * @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+             * @param matrix РјР°С‚СЂРёС†Р°, СЃ РєРѕС‚РѕСЂРѕР№ СЂР°Р±РѕС‚Р°РµРј
              */
             Task2(Matrix<int> matrix);
 
             /**
-             * @brief Выполнить вставку строк
+             * @brief Р’С‹РїРѕР»РЅРёС‚СЊ РІСЃС‚Р°РІРєСѓ СЃС‚СЂРѕРє
              */
             void solve() override;
 
             /**
-             * @brief Описание задачи
-             * @return строка с описанием
+             * @brief РћРїРёСЃР°РЅРёРµ Р·Р°РґР°С‡Рё
+             * @return СЃС‚СЂРѕРєР° СЃ РѕРїРёСЃР°РЅРёРµРј
              */
             std::string description() const override;
 
             /**
-             * @brief Получить матрицу
-             * @return константная ссылка на матрицу
+             * @brief РџРѕР»СѓС‡РёС‚СЊ РјР°С‚СЂРёС†Сѓ
+             * @return РєРѕРЅСЃС‚Р°РЅС‚РЅР°СЏ СЃСЃС‹Р»РєР° РЅР° РјР°С‚СЂРёС†Сѓ
              */
             const Matrix<int>& getMatrix() const { return matrix; }
         };
