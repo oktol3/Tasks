@@ -110,13 +110,13 @@ namespace miit
              * @param shift количество добавляемых пустых строк в начало
              * @return ссылка на текущий объект
              */
-            Matrix& operator>>(size_t shift);
+            Matrix& operator>>(const size_t shift);
 
             /**
              * @brief Заполнить матрицу с помощью генератора
              * @param gen ссылка на генератор значений
              */
-            void fill(Generator& gen);
+            void fill(const Generator& gen);
 
             /**
              * @brief Получить количество строк
@@ -141,7 +141,7 @@ namespace miit
              * @param pos индекс строки, после которой вставить
              * @param row строка для вставки
              */
-            void insertRow(size_t pos, const std::vector<T>& row);
+            void insertRow(const size_t pos, const std::vector<T>& row);
         };
 
 
