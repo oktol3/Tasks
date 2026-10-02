@@ -7,26 +7,26 @@ namespace miit
     namespace algebra
     {
         /**
-         * @brief Генератор значений из потока ввода
+         * @brief Р“РµРЅРµСЂР°С‚РѕСЂ Р·РЅР°С‡РµРЅРёР№ РёР· РїРѕС‚РѕРєР° РІРІРѕРґР°
          */
         class IStreamGenerator : public Generator
         {
         private:
             /**
-             * @brief Ссылка на поток ввода
+             * @brief РЎСЃС‹Р»РєР° РЅР° РїРѕС‚РѕРє РІРІРѕРґР°
              */
             std::istream& in;
 
         public:
             /**
-             * @brief Конструктор
-             * @param in поток ввода (по умолчанию std::cin)
+             * @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+             * @param in РїРѕС‚РѕРє РІРІРѕРґР° (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ std::cin)
              */
             IStreamGenerator(std::istream& in = std::cin);
 
             /**
-             * @brief Считать очередное число из потока
-             * @return считанное целое число
+             * @brief РЎС‡РёС‚Р°С‚СЊ РѕС‡РµСЂРµРґРЅРѕРµ С‡РёСЃР»Рѕ РёР· РїРѕС‚РѕРєР°
+             * @return СЃС‡РёС‚Р°РЅРЅРѕРµ С†РµР»РѕРµ С‡РёСЃР»Рѕ
              */
             int generate() override;
         };
