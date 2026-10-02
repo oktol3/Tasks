@@ -1,34 +1,21 @@
-#pragma once
-#include "Generator.h"
-#include <iostream>
+#include "RandomGenerator.h"
 
-namespace miit
+/**
+ * @brief Конструктор
+ * @param min нижняя граница диапазона (включительно)
+ * @param max верхняя граница диапазона (включительно)
+ */
+miit::algebra::RandomGenerator::RandomGenerator(const int min, const int max)
 {
-    namespace algebra
-    {
-        /**
-         * @brief Генератор значений из потока ввода
-         */
-        class IStreamGenerator : public Generator
-        {
-        private:
-            /**
-             * @brief Ссылка на поток ввода
-             */
-            std::istream& in;
+    this->generator = std::mt19937(std::random_device{}());
+    this->distribution = std::uniform_int_distribution<int>(min, max);
+}
 
-        public:
-            /**
-             * @brief Конструктор
-             * @param in поток ввода (по умолчанию std::cin)
-             */
-            IStreamGenerator(std::istream& in = std::cin);
-
-            /**
-             * @brief Считать очередное число из потока
-             * @return считанное целое число
-             */
-            int generate() override;
-        };
-    }
+/**
+ * @brief Сгенерировать случайное число
+ * @return случайное число из диапазона [min, max]
+ */
+int miit::algebra::RandomGenerator::generate()
+{
+    return this->distribution(this->generator);
 }
