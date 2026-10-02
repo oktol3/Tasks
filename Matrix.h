@@ -17,7 +17,7 @@ namespace miit
         class Matrix
         {
         private:
-            /**
+            /** 
              * @brief Внутреннее хранилище элементов (строки x столбцы)
              */
             std::vector<std::vector<T>> data;
@@ -43,7 +43,7 @@ namespace miit
              * @param rows количество строк
              * @param cols количество столбцов
              */
-            Matrix(size_t rows, size_t cols);
+            Matrix(const size_t rows, const size_t cols);
 
             /**
              * @brief Конструктор с размерами и константным значением
@@ -51,7 +51,7 @@ namespace miit
              * @param cols количество столбцов
              * @param value значение для заполнения всех элементов
              */
-            Matrix(size_t rows, size_t cols, const T& value);
+            Matrix(size_t rows, size_t cols, Generator& gen);
 
             /**
              * @brief Конструктор копирования
@@ -89,21 +89,21 @@ namespace miit
              * @param index индекс строки
              * @return ссылка на строку матрицы
              */
-            std::vector<T>& operator[](size_t index);
+            std::vector<T>& operator[](const size_t index);
 
             /**
              * @brief Оператор доступа по индексу (константный)
              * @param index индекс строки
              * @return константная ссылка на строку матрицы
              */
-            const std::vector<T>& operator[](size_t index) const;
+            const std::vector<T>& operator[](const size_t index) const;
 
             /**
              * @brief Оператор сдвига влево
              * @param shift количество удаляемых строк с начала
              * @return ссылка на текущий объект
              */
-            Matrix& operator<<(size_t shift);
+            Matrix& operator<<(const size_t shift);
 
             /**
              * @brief Оператор сдвига вправо
@@ -144,7 +144,6 @@ namespace miit
             void insertRow(size_t pos, const std::vector<T>& row);
         };
 
-        // ===== Реализация шаблонных методов =====
 
         template <typename T>
         Matrix<T>::Matrix() : rows(0), cols(0) {}
@@ -155,8 +154,10 @@ namespace miit
         }
 
         template <typename T>
-        Matrix<T>::Matrix(size_t rows, size_t cols, const T& value)
-            : rows(rows), cols(cols), data(rows, std::vector<T>(cols, value)) {
+        Matrix<T>::Matrix(size_t rows, size_t cols, Generator& gen)
+            : rows(rows), cols(cols), data(rows, std::vector<T>(cols, T{}))
+        {
+            fill(gen);
         }
 
         template <typename T>
