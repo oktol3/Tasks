@@ -163,7 +163,7 @@ namespace miit
         template <typename T>
         std::vector<T>& Matrix<T>::operator[](const size_t index)
         {
-            if (index >= rows)
+            if (index >= data.size())
                 throw std::out_of_range("Matrix row index out of range");
             return data[index];
         }
@@ -171,7 +171,7 @@ namespace miit
         template <typename T>
         const std::vector<T>& Matrix<T>::operator[](const size_t index) const
         {
-            if (index >= rows)
+            if (index >= data.size())
                 throw std::out_of_range("Matrix row index out of range");
             return data[index];
         }
