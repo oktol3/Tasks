@@ -1,6 +1,7 @@
 #include "RoadTransport.h"
 
 #include <stdexcept>
+#include <typeinfo>
 #include <utility>
 
 RoadTransport::RoadTransport()
@@ -9,30 +10,30 @@ RoadTransport::RoadTransport()
 }
 
 RoadTransport::RoadTransport(const std::string& id,
-    const std::string& name,
-    const double capacityTons,
-    const double speedKmH,
-    const double ratePerTonKm,
-    const int axleCount,
-    const double tollRoadFee)
+                             const std::string& name,
+                             const double capacityTons,
+                             const double speedKmH,
+                             const double ratePerTonKm,
+                             const int axleCount,
+                             const double tollRoadFee)
     : Transport(id, name, capacityTons, speedKmH, ratePerTonKm),
-    axleCount(axleCount),
-    tollRoadFee(tollRoadFee)
+      axleCount(axleCount),
+      tollRoadFee(tollRoadFee)
 {
     if (this->axleCount < 2)
     {
-        throw std::invalid_argument("Количество осей автомобиля должно быть не менее двух");
+        throw std::invalid_argument("РљРѕР»РёС‡РµСЃС‚РІРѕ РѕСЃРµР№ Р°РІС‚РѕРјРѕР±РёР»СЏ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РЅРµ РјРµРЅРµРµ РґРІСѓС…");
     }
     if (this->tollRoadFee < 0.0)
     {
-        throw std::invalid_argument("Дорожный сбор не может быть отрицательным");
+        throw std::invalid_argument("Р”РѕСЂРѕР¶РЅС‹Р№ СЃР±РѕСЂ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
     }
 }
 
 RoadTransport::RoadTransport(const RoadTransport& other)
     : Transport(other),
-    axleCount(other.axleCount),
-    tollRoadFee(other.tollRoadFee)
+      axleCount(other.axleCount),
+      tollRoadFee(other.tollRoadFee)
 {
 }
 
@@ -49,8 +50,8 @@ RoadTransport& RoadTransport::operator=(const RoadTransport& other)
 
 RoadTransport::RoadTransport(RoadTransport&& other) noexcept
     : Transport(std::move(other)),
-    axleCount(other.axleCount),
-    tollRoadFee(other.tollRoadFee)
+      axleCount(other.axleCount),
+      tollRoadFee(other.tollRoadFee)
 {
     other.axleCount = 0;
     other.tollRoadFee = 0.0;
@@ -78,7 +79,7 @@ void RoadTransport::SetAxleCount(const int count)
 {
     if (count < 2)
     {
-        throw std::invalid_argument("Количество осей автомобиля должно быть не менее двух");
+        throw std::invalid_argument("РљРѕР»РёС‡РµСЃС‚РІРѕ РѕСЃРµР№ Р°РІС‚РѕРјРѕР±РёР»СЏ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РЅРµ РјРµРЅРµРµ РґРІСѓС…");
     }
     axleCount = count;
 }
@@ -92,14 +93,32 @@ void RoadTransport::SetTollRoadFee(const double fee)
 {
     if (fee < 0.0)
     {
-        throw std::invalid_argument("Дорожный сбор не может быть отрицательным");
+        throw std::invalid_argument("Р”РѕСЂРѕР¶РЅС‹Р№ СЃР±РѕСЂ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
     }
     tollRoadFee = fee;
 }
 
 std::string RoadTransport::GetTransportType() const
 {
-    return "Автомобильный";
+    return "РђРІС‚РѕРјРѕР±РёР»СЊРЅС‹Р№";
+}
+
+std::unique_ptr<Transport> RoadTransport::Clone() const
+{
+    return std::make_unique<RoadTransport>(*this);
+}
+
+bool RoadTransport::Equals(const Transport& other) const
+{
+    try
+    {
+        const RoadTransport& derived = dynamic_cast<const RoadTransport&>(other);
+        return *this == derived;
+    }
+    catch (const std::bad_cast&)
+    {
+        return false;
+    }
 }
 
 double RoadTransport::CalculateDeliveryCost(const double distanceKm, const double weightTons) const
@@ -110,15 +129,15 @@ double RoadTransport::CalculateDeliveryCost(const double distanceKm, const doubl
 std::string RoadTransport::ToString() const
 {
     return Transport::ToString() +
-        " | Осей: " + std::to_string(axleCount) +
-        " | Платные дороги: " + FormatDouble(tollRoadFee) + " руб.";
+           " | РћСЃРµР№: " + std::to_string(axleCount) +
+           " | РџР»Р°С‚РЅС‹Рµ РґРѕСЂРѕРіРё: " + FormatDouble(tollRoadFee) + " СЂСѓР±.";
 }
 
 bool RoadTransport::operator==(const RoadTransport& other) const
 {
     return Transport::operator==(other) &&
-        axleCount == other.axleCount &&
-        AreEqual(tollRoadFee, other.tollRoadFee);
+           axleCount == other.axleCount &&
+           AreEqual(tollRoadFee, other.tollRoadFee);
 }
 
 bool RoadTransport::operator!=(const RoadTransport& other) const
