@@ -14,45 +14,45 @@ void Route::ValidateNonEmpty(const std::string& value, const std::string& fieldN
 {
     if (value.find_first_not_of(" \t\n\r") == std::string::npos)
     {
-        throw std::invalid_argument(fieldName + " íå ìîæåò áûòü ïóñòûì");
+        throw std::invalid_argument(fieldName + " Ð½Ðµ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð¿ÑƒÑÑ‚Ñ‹Ð¼");
     }
 }
 
 Route::Route()
-    : id("R-0"), origin("Íå óêàçàí"), destination("Íå óêàçàí"), distanceKm(1.0), basePrice(0.0)
+    : id("R-0"), origin("ÐÐµ ÑƒÐºÐ°Ð·Ð°Ð½"), destination("ÐÐµ ÑƒÐºÐ°Ð·Ð°Ð½"), distanceKm(1.0), basePrice(0.0)
 {
 }
 
 Route::Route(const std::string& id,
-    const std::string& origin,
-    const std::string& destination,
-    const double distanceKm,
-    const double basePrice)
+             const std::string& origin,
+             const std::string& destination,
+             const double distanceKm,
+             const double basePrice)
     : id(id),
-    origin(origin),
-    destination(destination),
-    distanceKm(distanceKm),
-    basePrice(basePrice)
+      origin(origin),
+      destination(destination),
+      distanceKm(distanceKm),
+      basePrice(basePrice)
 {
-    ValidateNonEmpty(this->id, "ID ìàðøðóòà");
-    ValidateNonEmpty(this->origin, "Ïóíêò îòïðàâëåíèÿ");
-    ValidateNonEmpty(this->destination, "Ïóíêò íàçíà÷åíèÿ");
+    ValidateNonEmpty(this->id, "ID Ð¼Ð°Ñ€ÑˆÑ€ÑƒÑ‚Ð°");
+    ValidateNonEmpty(this->origin, "ÐŸÑƒÐ½ÐºÑ‚ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ");
+    ValidateNonEmpty(this->destination, "ÐŸÑƒÐ½ÐºÑ‚ Ð½Ð°Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ñ");
     if (this->distanceKm <= 0.0)
     {
-        throw std::invalid_argument("Ïðîòÿæåííîñòü ìàðøðóòà äîëæíà áûòü áîëüøå íóëÿ");
+        throw std::invalid_argument("ÐŸÑ€Ð¾Ñ‚ÑÐ¶ÐµÐ½Ð½Ð¾ÑÑ‚ÑŒ Ð¼Ð°Ñ€ÑˆÑ€ÑƒÑ‚Ð° Ð´Ð¾Ð»Ð¶Ð½Ð° Ð±Ñ‹Ñ‚ÑŒ Ð±Ð¾Ð»ÑŒÑˆÐµ Ð½ÑƒÐ»Ñ");
     }
     if (this->basePrice < 0.0)
     {
-        throw std::invalid_argument("Áàçîâàÿ öåíà ìàðøðóòà íå ìîæåò áûòü îòðèöàòåëüíîé");
+        throw std::invalid_argument("Ð‘Ð°Ð·Ð¾Ð²Ð°Ñ Ñ†ÐµÐ½Ð° Ð¼Ð°Ñ€ÑˆÑ€ÑƒÑ‚Ð° Ð½Ðµ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð¾Ñ‚Ñ€Ð¸Ñ†Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ð¹");
     }
 }
 
 Route::Route(const Route& other)
     : id(other.id),
-    origin(other.origin),
-    destination(other.destination),
-    distanceKm(other.distanceKm),
-    basePrice(other.basePrice)
+      origin(other.origin),
+      destination(other.destination),
+      distanceKm(other.distanceKm),
+      basePrice(other.basePrice)
 {
 }
 
@@ -71,10 +71,10 @@ Route& Route::operator=(const Route& other)
 
 Route::Route(Route&& other) noexcept
     : id(std::move(other.id)),
-    origin(std::move(other.origin)),
-    destination(std::move(other.destination)),
-    distanceKm(other.distanceKm),
-    basePrice(other.basePrice)
+      origin(std::move(other.origin)),
+      destination(std::move(other.destination)),
+      distanceKm(other.distanceKm),
+      basePrice(other.basePrice)
 {
     other.distanceKm = 0.0;
     other.basePrice = 0.0;
@@ -102,7 +102,7 @@ const std::string& Route::GetId() const
 
 void Route::SetId(const std::string& newId)
 {
-    ValidateNonEmpty(newId, "ID ìàðøðóòà");
+    ValidateNonEmpty(newId, "ID Ð¼Ð°Ñ€ÑˆÑ€ÑƒÑ‚Ð°");
     id = newId;
 }
 
@@ -113,7 +113,7 @@ const std::string& Route::GetOrigin() const
 
 void Route::SetOrigin(const std::string& newOrigin)
 {
-    ValidateNonEmpty(newOrigin, "Ïóíêò îòïðàâëåíèÿ");
+    ValidateNonEmpty(newOrigin, "ÐŸÑƒÐ½ÐºÑ‚ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ñ");
     origin = newOrigin;
 }
 
@@ -124,7 +124,7 @@ const std::string& Route::GetDestination() const
 
 void Route::SetDestination(const std::string& newDestination)
 {
-    ValidateNonEmpty(newDestination, "Ïóíêò íàçíà÷åíèÿ");
+    ValidateNonEmpty(newDestination, "ÐŸÑƒÐ½ÐºÑ‚ Ð½Ð°Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ñ");
     destination = newDestination;
 }
 
@@ -137,7 +137,7 @@ void Route::SetDistanceKm(const double distance)
 {
     if (distance <= 0.0)
     {
-        throw std::invalid_argument("Ïðîòÿæåííîñòü ìàðøðóòà äîëæíà áûòü áîëüøå íóëÿ");
+        throw std::invalid_argument("ÐŸÑ€Ð¾Ñ‚ÑÐ¶ÐµÐ½Ð½Ð¾ÑÑ‚ÑŒ Ð¼Ð°Ñ€ÑˆÑ€ÑƒÑ‚Ð° Ð´Ð¾Ð»Ð¶Ð½Ð° Ð±Ñ‹Ñ‚ÑŒ Ð±Ð¾Ð»ÑŒÑˆÐµ Ð½ÑƒÐ»Ñ");
     }
     distanceKm = distance;
 }
@@ -151,7 +151,7 @@ void Route::SetBasePrice(const double price)
 {
     if (price < 0.0)
     {
-        throw std::invalid_argument("Áàçîâàÿ öåíà ìàðøðóòà íå ìîæåò áûòü îòðèöàòåëüíîé");
+        throw std::invalid_argument("Ð‘Ð°Ð·Ð¾Ð²Ð°Ñ Ñ†ÐµÐ½Ð° Ð¼Ð°Ñ€ÑˆÑ€ÑƒÑ‚Ð° Ð½Ðµ Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ð¾Ñ‚Ñ€Ð¸Ñ†Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ð¹");
     }
     basePrice = price;
 }
@@ -164,17 +164,17 @@ std::string Route::GetRouteName() const
 std::string Route::ToString() const
 {
     return "[" + id + "] " + GetRouteName() +
-        " | Ðàññòîÿíèå: " + Transport::FormatDouble(distanceKm) + " êì" +
-        " | Áàçîâàÿ öåíà: " + Transport::FormatDouble(basePrice) + " ðóá.";
+           " | Ð Ð°ÑÑÑ‚Ð¾ÑÐ½Ð¸Ðµ: " + Transport::FormatDouble(distanceKm) + " ÐºÐ¼" +
+           " | Ð‘Ð°Ð·Ð¾Ð²Ð°Ñ Ñ†ÐµÐ½Ð°: " + Transport::FormatDouble(basePrice) + " Ñ€ÑƒÐ±.";
 }
 
 bool Route::operator==(const Route& other) const
 {
     return id == other.id &&
-        origin == other.origin &&
-        destination == other.destination &&
-        std::fabs(distanceKm - other.distanceKm) < kRouteEpsilon &&
-        std::fabs(basePrice - other.basePrice) < kRouteEpsilon;
+           origin == other.origin &&
+           destination == other.destination &&
+           std::fabs(distanceKm - other.distanceKm) < kRouteEpsilon &&
+           std::fabs(basePrice - other.basePrice) < kRouteEpsilon;
 }
 
 bool Route::operator!=(const Route& other) const
