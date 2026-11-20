@@ -3,108 +3,108 @@
 #include "Transport.h"
 
 /**
- * @brief Класс речного грузового транспорта
+ * @brief Класс железнодорожного грузового транспорта
  */
-class RiverTransport : public Transport
+class RailTransport : public Transport
 {
 private:
     /**
-     * @brief Осадка речного судна (м)
+     * @brief Количество грузовых вагонов в составе
      */
-    double draftMeters;
+    int wagonCount;
 
     /**
-     * @brief Сбор за прохождение шлюзов (руб.)
+     * @brief Станционный сбор за формирование и обработку состава (руб.)
      */
-    double lockPassageFee;
+    double stationHandlingFee;
 
 public:
     /**
      * @brief Конструктор по умолчанию
      */
-    RiverTransport();
+    RailTransport();
 
     /**
      * @brief Конструктор с параметрами
-     * @param id Идентификатор речного судна
-     * @param name Название речного судна
+     * @param id Идентификатор состава
+     * @param name Серия локомотива / название состава
      * @param capacityTons Грузоподъемность (т)
      * @param speedKmH Средняя скорость (км/ч)
      * @param ratePerTonKm Тариф за тонно-километр (руб.)
-     * @param draftMeters Осадка судна (м)
-     * @param lockPassageFee Сбор за прохождение шлюзов (руб.)
+     * @param wagonCount Количество вагонов
+     * @param stationHandlingFee Станционный сбор (руб.)
      */
-    RiverTransport(const std::string& id,
-                   const std::string& name,
-                   const double capacityTons,
-                   const double speedKmH,
-                   const double ratePerTonKm,
-                   const double draftMeters,
-                   const double lockPassageFee);
+    RailTransport(const std::string& id,
+                  const std::string& name,
+                  const double capacityTons,
+                  const double speedKmH,
+                  const double ratePerTonKm,
+                  const int wagonCount,
+                  const double stationHandlingFee);
 
     /**
      * @brief Деструктор по умолчанию
      */
-    ~RiverTransport() override = default;
+    ~RailTransport() override = default;
 
     /**
      * @brief Конструктор копирования
      * @param other Копируемый объект
      */
-    RiverTransport(const RiverTransport& other);
+    RailTransport(const RailTransport& other);
 
     /**
      * @brief Оператор присваивания копированием
      * @param other Присваиваемый объект
      * @return Ссылка на текущий объект
      */
-    RiverTransport& operator=(const RiverTransport& other);
+    RailTransport& operator=(const RailTransport& other);
 
     /**
      * @brief Конструктор перемещения
      * @param other Перемещаемый объект
      */
-    RiverTransport(RiverTransport&& other) noexcept;
+    RailTransport(RailTransport&& other) noexcept;
 
     /**
      * @brief Оператор присваивания перемещением
      * @param other Перемещаемый объект
      * @return Ссылка на текущий объект
      */
-    RiverTransport& operator=(RiverTransport&& other) noexcept;
+    RailTransport& operator=(RailTransport&& other) noexcept;
 
     /**
-     * @brief Получить осадку судна (м)
-     * @return Осадка судна в метрах
+     * @brief Получить количество вагонов в составе
+     * @return Количество вагонов
      */
-    double GetDraftMeters() const;
+    int GetWagonCount() const;
 
     /**
-     * @brief Установить осадку судна (м)
-     * @param draft Новая осадка судна
+     * @brief Установить количество вагонов в составе
+     * @param count Новое количество вагонов
      */
-    void SetDraftMeters(const double draft);
+    void SetWagonCount(const int count);
 
     /**
-     * @brief Получить сбор за прохождение шлюзов (руб.)
-     * @return Сумма шлюзового сбора
+     * @brief Получить станционный сбор (руб.)
+     * @return Сумма станционного сбора
      */
-    double GetLockPassageFee() const;
+    double GetStationHandlingFee() const;
 
     /**
-     * @brief Установить сбор за прохождение шлюзов (руб.)
-     * @param fee Новый шлюзовой сбор
+     * @brief Установить станционный сбор (руб.)
+     * @param fee Новый станционный сбор
      */
-    void SetLockPassageFee(const double fee);
+    void SetStationHandlingFee(const double fee);
 
     /**
-     * @brief Получить вид транспорта ("Речной")
-     * @return Строка "Речной"
+     * @brief Получить вид транспорта ("Железнодорожный")
+     * @return Строка "Железнодорожный"
      */
     std::string GetTransportType() const override;
 
     /**
-     * @brief Создать полиморфную копию речного транспорта
+     * @brief Создать полиморфную копию железнодорожного транспорта
      * @return Умный указатель на копию объекта
      */
     std::unique_ptr<Transport> Clone() const override;
@@ -117,7 +117,7 @@ public:
     bool Equals(const Transport& other) const override;
 
     /**
-     * @brief Рассчитать стоимость речной перевозки с учетом шлюзового сбора
+     * @brief Рассчитать стоимость железнодорожной перевозки с учетом станционного сбора
      * @param distanceKm Протяженность маршрута (км)
      * @param weightTons Масса груза (т)
      * @return Стоимость перевозки (руб.)
@@ -125,22 +125,22 @@ public:
     double CalculateDeliveryCost(const double distanceKm, const double weightTons) const override;
 
     /**
-     * @brief Получить полное строковое описание речного судна
+     * @brief Получить полное строковое описание железнодорожного состава
      * @return Строка с характеристиками
      */
     std::string ToString() const override;
 
     /**
-     * @brief Оператор равенства двух объектов RiverTransport
+     * @brief Оператор равенства двух объектов RailTransport
      * @param other Объект для сравнения
      * @return true, если объекты равны
      */
-    bool operator==(const RiverTransport& other) const;
+    bool operator==(const RailTransport& other) const;
 
     /**
-     * @brief Оператор неравенства двух объектов RiverTransport
+     * @brief Оператор неравенства двух объектов RailTransport
      * @param other Объект для сравнения
      * @return true, если объекты не равны
      */
-    bool operator!=(const RiverTransport& other) const;
+    bool operator!=(const RailTransport& other) const;
 };
