@@ -1,5 +1,6 @@
-﻿#pragma once
+#pragma once
 
+#include <memory>
 #include <string>
 
 /**
@@ -8,34 +9,53 @@
 class Transport
 {
 protected:
+    /**
+     * @brief Уникальный идентификатор транспортного средства
+     */
     std::string id;
+
+    /**
+     * @brief Название или модель транспортного средства
+     */
     std::string name;
+
+    /**
+     * @brief Максимальная грузоподъемность в тоннах
+     */
     double capacityTons;
+
+    /**
+     * @brief Средняя эксплуатационная скорость (км/ч)
+     */
     double speedKmH;
+
+    /**
+     * @brief Тариф перевозки за один тонно-километр (руб.)
+     */
     double ratePerTonKm;
 
     /**
-     * @brief Проверка, что строка не пустая и не состоит только из пробелов
+     * @brief Проверка, что строка не пустая и не состоит только из пробельных символов
      * @param value Проверяемая строка
-     * @param fieldName Название поля для текста исключения
+     * @param fieldName Название поля для формирования текста исключения
      */
     static void ValidateNonEmpty(const std::string& value, const std::string& fieldName);
 
     /**
-     * @brief Проверка равенства двух вещественных чисел с заданной точностью
+     * @brief Сравнение двух вещественных чисел с заданной погрешностью
      * @param lhs Первое число
      * @param rhs Второе число
-     * @return true, если числа равны с точностью 1e-6
+     * @return true, если числа равны с точностью 1e-6, иначе false
      */
-    static bool AreEqual(double lhs, double rhs);
+    static bool AreEqual(const double lhs, const double rhs);
 
     /**
-     * @brief Конструктор по умолчанию (для классов-наследников)
+     * @brief Конструктор по умолчанию
      */
     Transport();
 
     /**
-     * @brief Конструктор с параметрами (для классов-наследников)
+     * @brief Конструктор с параметрами
      * @param id Идентификатор транспорта
      * @param name Название / модель транспорта
      * @param capacityTons Грузоподъемность (т)
@@ -43,10 +63,10 @@ protected:
      * @param ratePerTonKm Тариф за тонно-километр (руб.)
      */
     Transport(const std::string& id,
-        const std::string& name,
-        double capacityTons,
-        double speedKmH,
-        double ratePerTonKm);
+              const std::string& name,
+              const double capacityTons,
+              const double speedKmH,
+              const double ratePerTonKm);
 
     /**
      * @brief Конструктор копирования
@@ -76,16 +96,16 @@ protected:
 
 public:
     /**
-     * @brief Виртуальный деструктор
+     * @brief Виртуальный деструктор по умолчанию
      */
     virtual ~Transport() = default;
 
     /**
      * @brief Форматирование вещественного числа с двумя знаками после запятой
      * @param value Вещественное число
-     * @return Строковое представление числа
+     * @return Отформатированная строка
      */
-    static std::string FormatDouble(double value);
+    static std::string FormatDouble(const double value);
 
     /**
      * @brief Получить идентификатор транспорта
@@ -121,7 +141,7 @@ public:
      * @brief Установить грузоподъемность (т)
      * @param capacity Новая грузоподъемность
      */
-    void SetCapacityTons(double capacity);
+    void SetCapacityTons(const double capacity);
 
     /**
      * @brief Получить среднюю скорость (км/ч)
@@ -133,11 +153,11 @@ public:
      * @brief Установить среднюю скорость (км/ч)
      * @param speed Новая скорость
      */
-    void SetSpeedKmH(double speed);
+    void SetSpeedKmH(const double speed);
 
     /**
      * @brief Получить тариф за тонно-километр
-     * @return Тариф (руб. / т*км)
+     * @return Тариф в рублях за тонно-километр
      */
     double GetRatePerTonKm() const;
 
@@ -145,44 +165,57 @@ public:
      * @brief Установить тариф за тонно-километр
      * @param rate Новый тариф
      */
-    void SetRatePerTonKm(double rate);
+    void SetRatePerTonKm(const double rate);
 
     /**
-     * @brief Получить тип (способ) доставки транспорта
-     * @return Название вида транспорта (воздушный, морской и т. д.)
+     * @brief Получить вид (способ) доставки транспорта
+     * @return Название вида транспорта
      */
     virtual std::string GetTransportType() const = 0;
 
     /**
-     * @brief Рассчитать транспортную составляющую стоимости перевозки груза
-     * @param distanceKm Расстояние маршрута (км)
-     * @param weightTons Вес груза (т)
-     * @return Стоимость перевозки транспортом
+     * @brief Полиморфное клонирование текущего объекта транспорта
+     * @return Умный указатель на глубокую копию объекта
      */
-    virtual double CalculateDeliveryCost(double distanceKm, double weightTons) const;
+    virtual std::unique_ptr<Transport> Clone() const = 0;
 
     /**
-     * @brief Полная строковая информация о транспортном средстве
-     * @return Строка с описанием транспорта
+     * @brief Полиморфное сравнение с другим объектом транспорта
+     * @param other Транспорт для сравнения
+     * @return true, если объекты имеют одинаковый тип и равные поля
+     */
+    virtual bool Equals(const Transport& other) const = 0;
+
+    /**
+     * @brief Рассчитать транспортную составляющую стоимости перевозки груза
+     * @param distanceKm Протяженность маршрута (км)
+     * @param weightTons Масса груза (т)
+     * @return Стоимость перевозки транспортом (руб.)
+     */
+    virtual double CalculateDeliveryCost(const double distanceKm, const double weightTons) const;
+
+    /**
+     * @brief Получить полную строковую информацию о транспортном средстве
+     * @return Строка с подробным описанием транспорта
      */
     virtual std::string ToString() const;
 
     /**
-     * @brief Краткая сводка о транспортном средстве
+     * @brief Получить краткую сводку о транспортном средстве
      * @return Краткая строка с описанием транспорта
      */
     virtual std::string GetSummary() const;
 
     /**
-     * @brief Оператор сравнения базовых полей транспорта
-     * @param other Объект для сравнения
-     * @return true, если объекты равны
+     * @brief Оператор сравнения базовых характеристик транспорта
+     * @param other Транспорт для сравнения
+     * @return true, если базовые поля и тип транспорта равны
      */
     bool operator==(const Transport& other) const;
 
     /**
-     * @brief Оператор неравенства
-     * @param other Объект для сравнения
+     * @brief Оператор неравенства базовых характеристик транспорта
+     * @param other Транспорт для сравнения
      * @return true, если объекты не равны
      */
     bool operator!=(const Transport& other) const;
