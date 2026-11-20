@@ -1,146 +1,146 @@
-#include "RiverTransport.h"
+#pragma once
 
-#include <stdexcept>
-#include <typeinfo>
-#include <utility>
+#include "Transport.h"
 
-RiverTransport::RiverTransport()
-    : Transport(), draftMeters(2.0), lockPassageFee(0.0)
+/**
+ * @brief Класс речного грузового транспорта
+ */
+class RiverTransport : public Transport
 {
-}
+private:
+    /**
+     * @brief Осадка речного судна (м)
+     */
+    double draftMeters;
 
-RiverTransport::RiverTransport(const std::string& id,
-                               const std::string& name,
-                               const double capacityTons,
-                               const double speedKmH,
-                               const double ratePerTonKm,
-                               const double draftMeters,
-                               const double lockPassageFee)
-    : Transport(id, name, capacityTons, speedKmH, ratePerTonKm),
-      draftMeters(draftMeters),
-      lockPassageFee(lockPassageFee)
-{
-    if (this->draftMeters <= 0.0)
-    {
-        throw std::invalid_argument("Осадка судна должна быть больше нуля");
-    }
-    if (this->lockPassageFee < 0.0)
-    {
-        throw std::invalid_argument("Сбор за шлюзование не может быть отрицательным");
-    }
-}
+    /**
+     * @brief Сбор за прохождение шлюзов (руб.)
+     */
+    double lockPassageFee;
 
-RiverTransport::RiverTransport(const RiverTransport& other)
-    : Transport(other),
-      draftMeters(other.draftMeters),
-      lockPassageFee(other.lockPassageFee)
-{
-}
+public:
+    /**
+     * @brief Конструктор по умолчанию
+     */
+    RiverTransport();
 
-RiverTransport& RiverTransport::operator=(const RiverTransport& other)
-{
-    if (this != &other)
-    {
-        Transport::operator=(other);
-        draftMeters = other.draftMeters;
-        lockPassageFee = other.lockPassageFee;
-    }
-    return *this;
-}
+    /**
+     * @brief Конструктор с параметрами
+     * @param id Идентификатор речного судна
+     * @param name Название речного судна
+     * @param capacityTons Грузоподъемность (т)
+     * @param speedKmH Средняя скорость (км/ч)
+     * @param ratePerTonKm Тариф за тонно-километр (руб.)
+     * @param draftMeters Осадка судна (м)
+     * @param lockPassageFee Сбор за прохождение шлюзов (руб.)
+     */
+    RiverTransport(const std::string& id,
+                   const std::string& name,
+                   const double capacityTons,
+                   const double speedKmH,
+                   const double ratePerTonKm,
+                   const double draftMeters,
+                   const double lockPassageFee);
 
-RiverTransport::RiverTransport(RiverTransport&& other) noexcept
-    : Transport(std::move(other)),
-      draftMeters(other.draftMeters),
-      lockPassageFee(other.lockPassageFee)
-{
-    other.draftMeters = 0.0;
-    other.lockPassageFee = 0.0;
-}
+    /**
+     * @brief Деструктор по умолчанию
+     */
+    ~RiverTransport() override = default;
 
-RiverTransport& RiverTransport::operator=(RiverTransport&& other) noexcept
-{
-    if (this != &other)
-    {
-        Transport::operator=(std::move(other));
-        draftMeters = other.draftMeters;
-        lockPassageFee = other.lockPassageFee;
-        other.draftMeters = 0.0;
-        other.lockPassageFee = 0.0;
-    }
-    return *this;
-}
+    /**
+     * @brief Конструктор копирования
+     * @param other Копируемый объект
+     */
+    RiverTransport(const RiverTransport& other);
 
-double RiverTransport::GetDraftMeters() const
-{
-    return draftMeters;
-}
+    /**
+     * @brief Оператор присваивания копированием
+     * @param other Присваиваемый объект
+     * @return Ссылка на текущий объект
+     */
+    RiverTransport& operator=(const RiverTransport& other);
 
-void RiverTransport::SetDraftMeters(const double draft)
-{
-    if (draft <= 0.0)
-    {
-        throw std::invalid_argument("Осадка судна должна быть больше нуля");
-    }
-    draftMeters = draft;
-}
+    /**
+     * @brief Конструктор перемещения
+     * @param other Перемещаемый объект
+     */
+    RiverTransport(RiverTransport&& other) noexcept;
 
-double RiverTransport::GetLockPassageFee() const
-{
-    return lockPassageFee;
-}
+    /**
+     * @brief Оператор присваивания перемещением
+     * @param other Перемещаемый объект
+     * @return Ссылка на текущий объект
+     */
+    RiverTransport& operator=(RiverTransport&& other) noexcept;
 
-void RiverTransport::SetLockPassageFee(const double fee)
-{
-    if (fee < 0.0)
-    {
-        throw std::invalid_argument("Сбор за шлюзование не может быть отрицательным");
-    }
-    lockPassageFee = fee;
-}
+    /**
+     * @brief Получить осадку судна (м)
+     * @return Осадка судна в метрах
+     */
+    double GetDraftMeters() const;
 
-std::string RiverTransport::GetTransportType() const
-{
-    return "Речной";
-}
+    /**
+     * @brief Установить осадку судна (м)
+     * @param draft Новая осадка судна
+     */
+    void SetDraftMeters(const double draft);
 
-std::unique_ptr<Transport> RiverTransport::Clone() const
-{
-    return std::make_unique<RiverTransport>(*this);
-}
+    /**
+     * @brief Получить сбор за прохождение шлюзов (руб.)
+     * @return Сумма шлюзового сбора
+     */
+    double GetLockPassageFee() const;
 
-bool RiverTransport::Equals(const Transport& other) const
-{
-    try
-    {
-        const RiverTransport& derived = dynamic_cast<const RiverTransport&>(other);
-        return *this == derived;
-    }
-    catch (const std::bad_cast&)
-    {
-        return false;
-    }
-}
+    /**
+     * @brief Установить сбор за прохождение шлюзов (руб.)
+     * @param fee Новый шлюзовой сбор
+     */
+    void SetLockPassageFee(const double fee);
 
-double RiverTransport::CalculateDeliveryCost(const double distanceKm, const double weightTons) const
-{
-    return Transport::CalculateDeliveryCost(distanceKm, weightTons) + lockPassageFee;
-}
+    /**
+     * @brief Получить вид транспорта ("Речной")
+     * @return Строка "Речной"
+     */
+    std::string GetTransportType() const override;
 
-std::string RiverTransport::ToString() const
-{
-    return Transport::ToString() +
-           " | Осадка: " + FormatDouble(draftMeters) + " м" +
-           " | Шлюзовой сбор: " + FormatDouble(lockPassageFee) + " руб.";
-}
+    /**
+     * @brief Создать полиморфную копию речного транспорта
+     * @return Умный указатель на копию объекта
+     */
+    std::unique_ptr<Transport> Clone() const override;
 
-bool RiverTransport::operator==(const RiverTransport& other) const
-{
-    return Transport::operator==(other) &&
-           AreEqual(draftMeters, other.draftMeters) &&
-           AreEqual(lockPassageFee, other.lockPassageFee);
-}
+    /**
+     * @brief Полиморфное сравнение с другим объектом транспорта
+     * @param other Объект транспорта для сравнения
+     * @return true, если объекты равны
+     */
+    bool Equals(const Transport& other) const override;
 
-bool RiverTransport::operator!=(const RiverTransport& other) const
-{
-    return !(*this == other);
-}
+    /**
+     * @brief Рассчитать стоимость речной перевозки с учетом шлюзового сбора
+     * @param distanceKm Протяженность маршрута (км)
+     * @param weightTons Масса груза (т)
+     * @return Стоимость перевозки (руб.)
+     */
+    double CalculateDeliveryCost(const double distanceKm, const double weightTons) const override;
+
+    /**
+     * @brief Получить полное строковое описание речного судна
+     * @return Строка с характеристиками
+     */
+    std::string ToString() const override;
+
+    /**
+     * @brief Оператор равенства двух объектов RiverTransport
+     * @param other Объект для сравнения
+     * @return true, если объекты равны
+     */
+    bool operator==(const RiverTransport& other) const;
+
+    /**
+     * @brief Оператор неравенства двух объектов RiverTransport
+     * @param other Объект для сравнения
+     * @return true, если объекты не равны
+     */
+    bool operator!=(const RiverTransport& other) const;
+};
