@@ -10,60 +10,48 @@ namespace
 }
 
 CargoOrder::CargoOrder()
-    : id(0), client(nullptr), route(nullptr), transport(nullptr), cargoName(""), weightTons(0.0)
+    : id(0), client(), route(), transport(nullptr), cargoName(""), weightTons(0.0)
 {
 }
 
 CargoOrder::CargoOrder(const int id,
-    const Client* client,
-    const Route* route,
-    const Transport* transport,
-    const std::string& cargoName,
-    const double weightTons)
+                       const Client& client,
+                       const Route& route,
+                       const Transport& transport,
+                       const std::string& cargoName,
+                       const double weightTons)
     : id(id),
-    client(client),
-    route(route),
-    transport(transport),
-    cargoName(cargoName),
-    weightTons(weightTons)
+      client(client),
+      route(route),
+      transport(transport.Clone()),
+      cargoName(cargoName),
+      weightTons(weightTons)
 {
     if (this->id <= 0)
     {
-        throw std::invalid_argument("ID Á‡Í‡Á‡ ‰ÓÎÊÂÌ ·˚Ú¸ ·ÓÎ¸¯Â ÌÛÎˇ");
-    }
-    if (this->client == nullptr)
-    {
-        throw std::invalid_argument(" ÎËÂÌÚ ÌÂ ÏÓÊÂÚ ·˚Ú¸ nullptr");
-    }
-    if (this->route == nullptr)
-    {
-        throw std::invalid_argument("Ã‡¯ÛÚ ÌÂ ÏÓÊÂÚ ·˚Ú¸ nullptr");
-    }
-    if (this->transport == nullptr)
-    {
-        throw std::invalid_argument("“‡ÌÒÔÓÚ ÌÂ ÏÓÊÂÚ ·˚Ú¸ nullptr");
+        throw std::invalid_argument("ID –∑–∞–∫–∞–∑–∞ –¥–æ–ª–∂–µ–Ω –±—ã—Ç—å –±–æ–ª—å—à–µ –Ω—É–ª—è");
     }
     if (this->cargoName.find_first_not_of(" \t\n\r") == std::string::npos)
     {
-        throw std::invalid_argument("Õ‡ËÏÂÌÓ‚‡ÌËÂ „ÛÁ‡ ÌÂ ÏÓÊÂÚ ·˚Ú¸ ÔÛÒÚ˚Ï");
+        throw std::invalid_argument("–ù–∞–∏–º–µ–Ω–æ–≤–∞–Ω–∏–µ –≥—Ä—É–∑–∞ –Ω–µ –º–æ–∂–µ—Ç –±—ã—Ç—å –ø—É—Å—Ç—ã–º");
     }
     if (this->weightTons <= 0.0)
     {
-        throw std::invalid_argument("Ã‡ÒÒ‡ „ÛÁ‡ ‰ÓÎÊÌ‡ ·˚Ú¸ ·ÓÎ¸¯Â ÌÛÎˇ");
+        throw std::invalid_argument("–ú–∞—Å—Å–∞ –≥—Ä—É–∑–∞ –¥–æ–ª–∂–Ω–∞ –±—ã—Ç—å –±–æ–ª—å—à–µ –Ω—É–ª—è");
     }
     if (this->weightTons > this->transport->GetCapacityTons())
     {
-        throw std::invalid_argument("Ã‡ÒÒ‡ „ÛÁ‡ ÔÂ‚˚¯‡ÂÚ „ÛÁÓÔÓ‰˙ÂÏÌÓÒÚ¸ ‚˚·‡ÌÌÓ„Ó Ú‡ÌÒÔÓÚ‡");
+        throw std::invalid_argument("–ú–∞—Å—Å–∞ –≥—Ä—É–∑–∞ –ø—Ä–µ–≤—ã—à–∞–µ—Ç –≥—Ä—É–∑–æ–ø–æ–¥—ä–µ–º–Ω–æ—Å—Ç—å –≤—ã–±—Ä–∞–Ω–Ω–æ–≥–æ —Ç—Ä–∞–Ω—Å–ø–æ—Ä—Ç–∞");
     }
 }
 
 CargoOrder::CargoOrder(const CargoOrder& other)
     : id(other.id),
-    client(other.client),
-    route(other.route),
-    transport(other.transport),
-    cargoName(other.cargoName),
-    weightTons(other.weightTons)
+      client(other.client),
+      route(other.route),
+      transport(other.transport ? other.transport->Clone() : nullptr),
+      cargoName(other.cargoName),
+      weightTons(other.weightTons)
 {
 }
 
@@ -74,7 +62,7 @@ CargoOrder& CargoOrder::operator=(const CargoOrder& other)
         id = other.id;
         client = other.client;
         route = other.route;
-        transport = other.transport;
+        transport = other.transport ? other.transport->Clone() : nullptr;
         cargoName = other.cargoName;
         weightTons = other.weightTons;
     }
@@ -83,16 +71,13 @@ CargoOrder& CargoOrder::operator=(const CargoOrder& other)
 
 CargoOrder::CargoOrder(CargoOrder&& other) noexcept
     : id(other.id),
-    client(other.client),
-    route(other.route),
-    transport(other.transport),
-    cargoName(std::move(other.cargoName)),
-    weightTons(other.weightTons)
+      client(std::move(other.client)),
+      route(std::move(other.route)),
+      transport(std::move(other.transport)),
+      cargoName(std::move(other.cargoName)),
+      weightTons(other.weightTons)
 {
     other.id = 0;
-    other.client = nullptr;
-    other.route = nullptr;
-    other.transport = nullptr;
     other.weightTons = 0.0;
 }
 
@@ -101,15 +86,12 @@ CargoOrder& CargoOrder::operator=(CargoOrder&& other) noexcept
     if (this != &other)
     {
         id = other.id;
-        client = other.client;
-        route = other.route;
-        transport = other.transport;
+        client = std::move(other.client);
+        route = std::move(other.route);
+        transport = std::move(other.transport);
         cargoName = std::move(other.cargoName);
         weightTons = other.weightTons;
         other.id = 0;
-        other.client = nullptr;
-        other.route = nullptr;
-        other.transport = nullptr;
         other.weightTons = 0.0;
     }
     return *this;
@@ -120,19 +102,28 @@ int CargoOrder::GetId() const
     return id;
 }
 
-const Client* CargoOrder::GetClient() const
+const Client& CargoOrder::GetClient() const
 {
     return client;
 }
 
-const Route* CargoOrder::GetRoute() const
+const Route& CargoOrder::GetRoute() const
 {
     return route;
 }
 
-const Transport* CargoOrder::GetTransport() const
+bool CargoOrder::HasTransport() const
 {
-    return transport;
+    return static_cast<bool>(transport);
+}
+
+const Transport& CargoOrder::GetTransport() const
+{
+    if (!transport)
+    {
+        throw std::logic_error("–¢—Ä–∞–Ω—Å–ø–æ—Ä—Ç –≤ –∑–∞–∫–∞–∑–µ –Ω–µ –∑–∞–¥–∞–Ω");
+    }
+    return *transport;
 }
 
 const std::string& CargoOrder::GetCargoName() const
@@ -147,47 +138,49 @@ double CargoOrder::GetWeightTons() const
 
 double CargoOrder::CalculateCost() const
 {
-    if (client == nullptr || route == nullptr || transport == nullptr)
+    if (!transport || id <= 0)
     {
-        throw std::logic_error("ÕÂ‚ÓÁÏÓÊÌÓ ‡ÒÒ˜ËÚ‡Ú¸ ÒÚÓËÏÓÒÚ¸ ÌÂÁ‡ÔÓÎÌÂÌÌÓ„Ó Á‡Í‡Á‡");
+        throw std::logic_error("–ù–µ–≤–æ–∑–º–æ–∂–Ω–æ —Ä–∞—Å—Å—á–∏—Ç–∞—Ç—å —Å—Ç–æ–∏–º–æ—Å—Ç—å –Ω–µ–∑–∞–ø–æ–ª–Ω–µ–Ω–Ω–æ–≥–æ –∑–∞–∫–∞–∑–∞");
     }
-    const double rawCost = route->GetBasePrice() +
-        transport->CalculateDeliveryCost(route->GetDistanceKm(), weightTons);
-    const double discountFactor = 1.0 - client->GetEffectiveDiscountPercent() / 100.0;
+    const double rawCost = route.GetBasePrice() +
+                           transport->CalculateDeliveryCost(route.GetDistanceKm(), weightTons);
+    const double discountFactor = 1.0 - client.GetEffectiveDiscountPercent() / 100.0;
     return rawCost * discountFactor;
 }
 
 double CargoOrder::GetFreightTurnover() const
 {
-    if (route == nullptr)
+    if (!transport || weightTons <= 0.0)
     {
         return 0.0;
     }
-    return weightTons * route->GetDistanceKm();
+    return weightTons * route.GetDistanceKm();
 }
 
 std::string CargoOrder::ToString() const
 {
-    if (client == nullptr || route == nullptr || transport == nullptr)
+    if (!transport || id <= 0)
     {
-        return "«‡Í‡Á #" + std::to_string(id) + " (ÌÂ Á‡ÔÓÎÌÂÌ)";
+        return "–ó–∞–∫–∞–∑ #" + std::to_string(id) + " (–Ω–µ –∑–∞–ø–æ–ª–Ω–µ–Ω)";
     }
-    return "«‡Í‡Á #" + std::to_string(id) +
-        " | √ÛÁ: " + cargoName + " (" + Transport::FormatDouble(weightTons) + " Ú)" +
-        " | Ã‡¯ÛÚ: " + route->GetRouteName() +
-        " | “‡ÌÒÔÓÚ: " + transport->GetSummary() +
-        " |  ÎËÂÌÚ: " + client->GetName() +
-        " | —ÚÓËÏÓÒÚ¸: " + Transport::FormatDouble(CalculateCost()) + " Û·.";
+    return "–ó–∞–∫–∞–∑ #" + std::to_string(id) +
+           " | –ì—Ä—É–∑: " + cargoName + " (" + Transport::FormatDouble(weightTons) + " —Ç)" +
+           " | –ú–∞—Ä—à—Ä—É—Ç: " + route.GetRouteName() +
+           " | –¢—Ä–∞–Ω—Å–ø–æ—Ä—Ç: " + transport->GetSummary() +
+           " | –ö–ª–∏–µ–Ω—Ç: " + client.GetName() +
+           " | –°—Ç–æ–∏–º–æ—Å—Ç—å: " + Transport::FormatDouble(CalculateCost()) + " —Ä—É–±.";
 }
 
 bool CargoOrder::operator==(const CargoOrder& other) const
 {
+    const bool sameTransport = (!transport && !other.transport) ||
+                               (transport && other.transport && transport->Equals(*other.transport));
     return id == other.id &&
-        client == other.client &&
-        route == other.route &&
-        transport == other.transport &&
-        cargoName == other.cargoName &&
-        std::fabs(weightTons - other.weightTons) < kOrderEpsilon;
+           client == other.client &&
+           route == other.route &&
+           sameTransport &&
+           cargoName == other.cargoName &&
+           std::fabs(weightTons - other.weightTons) < kOrderEpsilon;
 }
 
 bool CargoOrder::operator!=(const CargoOrder& other) const
