@@ -6,7 +6,7 @@
 #include <utility>
 
 TransportCompany::TransportCompany()
-    : name("Транспортная компания")
+    : name("РўСЂР°РЅСЃРїРѕСЂС‚РЅР°СЏ РєРѕРјРїР°РЅРёСЏ")
 {
 }
 
@@ -15,18 +15,25 @@ TransportCompany::TransportCompany(const std::string& name)
 {
     if (this->name.find_first_not_of(" \t\n\r") == std::string::npos)
     {
-        throw std::invalid_argument("Название компании не может быть пустым");
+        throw std::invalid_argument("РќР°Р·РІР°РЅРёРµ РєРѕРјРїР°РЅРёРё РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј");
     }
 }
 
 TransportCompany::TransportCompany(const TransportCompany& other)
     : name(other.name),
-    routes(other.routes),
-    transports(other.transports),
-    routeTransports(other.routeTransports),
-    clients(other.clients),
-    orders(other.orders)
+      routes(other.routes),
+      routeTransportIds(other.routeTransportIds),
+      clients(other.clients),
+      orders(other.orders)
 {
+    transports.reserve(other.transports.size());
+    for (const std::shared_ptr<Transport>& item : other.transports)
+    {
+        if (item)
+        {
+            transports.push_back(std::shared_ptr<Transport>(item->Clone()));
+        }
+    }
 }
 
 TransportCompany& TransportCompany::operator=(const TransportCompany& other)
@@ -35,21 +42,30 @@ TransportCompany& TransportCompany::operator=(const TransportCompany& other)
     {
         name = other.name;
         routes = other.routes;
-        transports = other.transports;
-        routeTransports = other.routeTransports;
+        routeTransportIds = other.routeTransportIds;
         clients = other.clients;
         orders = other.orders;
+
+        transports.clear();
+        transports.reserve(other.transports.size());
+        for (const std::shared_ptr<Transport>& item : other.transports)
+        {
+            if (item)
+            {
+                transports.push_back(std::shared_ptr<Transport>(item->Clone()));
+            }
+        }
     }
     return *this;
 }
 
 TransportCompany::TransportCompany(TransportCompany&& other) noexcept
     : name(std::move(other.name)),
-    routes(std::move(other.routes)),
-    transports(std::move(other.transports)),
-    routeTransports(std::move(other.routeTransports)),
-    clients(std::move(other.clients)),
-    orders(std::move(other.orders))
+      routes(std::move(other.routes)),
+      transports(std::move(other.transports)),
+      routeTransportIds(std::move(other.routeTransportIds)),
+      clients(std::move(other.clients)),
+      orders(std::move(other.orders))
 {
 }
 
@@ -60,7 +76,7 @@ TransportCompany& TransportCompany::operator=(TransportCompany&& other) noexcept
         name = std::move(other.name);
         routes = std::move(other.routes);
         transports = std::move(other.transports);
-        routeTransports = std::move(other.routeTransports);
+        routeTransportIds = std::move(other.routeTransportIds);
         clients = std::move(other.clients);
         orders = std::move(other.orders);
     }
@@ -76,124 +92,139 @@ void TransportCompany::SetName(const std::string& newName)
 {
     if (newName.find_first_not_of(" \t\n\r") == std::string::npos)
     {
-        throw std::invalid_argument("Название компании не может быть пустым");
+        throw std::invalid_argument("РќР°Р·РІР°РЅРёРµ РєРѕРјРїР°РЅРёРё РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј");
     }
     name = newName;
 }
 
 bool TransportCompany::IsTransportAssignedToRoute(const std::string& routeId,
-    const Transport* transport) const
+                                                  const std::string& transportId) const
 {
-    const auto it = routeTransports.find(routeId);
-    if (it == routeTransports.end())
+    const auto it = routeTransportIds.find(routeId);
+    if (it == routeTransportIds.end())
     {
         return false;
     }
-    return std::find(it->second.begin(), it->second.end(), transport) != it->second.end();
+    return std::find(it->second.begin(), it->second.end(), transportId) != it->second.end();
 }
 
-void TransportCompany::AddRoute(Route* route)
+void TransportCompany::AddRoute(const Route& route)
 {
-    if (route == nullptr)
+    if (HasRoute(route.GetId()))
     {
-        throw std::invalid_argument("Нельзя добавить пустой указатель на маршрут");
-    }
-    if (FindRouteById(route->GetId()) != nullptr)
-    {
-        throw std::invalid_argument("Маршрут с ID " + route->GetId() + " уже существует");
+        throw std::invalid_argument("РњР°СЂС€СЂСѓС‚ СЃ ID " + route.GetId() + " СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚");
     }
     routes.push_back(route);
-    routeTransports[route->GetId()] = {};
+    routeTransportIds[route.GetId()] = {};
 }
 
-void TransportCompany::AddTransport(Transport* transport)
+void TransportCompany::AddTransport(const Transport& transport)
 {
-    if (transport == nullptr)
+    if (HasTransport(transport.GetId()))
     {
-        throw std::invalid_argument("Нельзя добавить пустой указатель на транспорт");
+        throw std::invalid_argument("РўСЂР°РЅСЃРїРѕСЂС‚ СЃ ID " + transport.GetId() + " СѓР¶Рµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ");
     }
-    if (FindTransportById(transport->GetId()) != nullptr)
-    {
-        throw std::invalid_argument("Транспорт с ID " + transport->GetId() + " уже зарегистрирован");
-    }
-    transports.push_back(transport);
+    transports.push_back(std::shared_ptr<Transport>(transport.Clone()));
 }
 
-void TransportCompany::AssignTransportToRoute(const std::string& routeId, Transport* transport)
+void TransportCompany::AssignTransportToRoute(const std::string& routeId, const std::string& transportId)
 {
-    if (transport == nullptr)
+    if (!HasRoute(routeId))
     {
-        throw std::invalid_argument("Нельзя назначить пустой указатель на транспорт");
+        throw std::invalid_argument("РњР°СЂС€СЂСѓС‚ СЃ ID " + routeId + " РЅРµ РЅР°Р№РґРµРЅ");
     }
-    if (FindRouteById(routeId) == nullptr)
+    if (!HasTransport(transportId))
     {
-        throw std::invalid_argument("Маршрут с ID " + routeId + " не найден");
+        throw std::invalid_argument("РўСЂР°РЅСЃРїРѕСЂС‚ СЃ ID " + transportId + " РЅРµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ");
     }
-    if (FindTransportById(transport->GetId()) == nullptr)
+    if (!IsTransportAssignedToRoute(routeId, transportId))
     {
-        transports.push_back(transport);
-    }
-    if (!IsTransportAssignedToRoute(routeId, transport))
-    {
-        routeTransports[routeId].push_back(transport);
+        routeTransportIds[routeId].push_back(transportId);
     }
 }
 
-void TransportCompany::AddClient(Client* client)
+void TransportCompany::AssignTransportToRoute(const std::string& routeId, const Transport& transport)
 {
-    if (client == nullptr)
+    if (!HasRoute(routeId))
     {
-        throw std::invalid_argument("Нельзя добавить пустой указатель на клиента");
+        throw std::invalid_argument("РњР°СЂС€СЂСѓС‚ СЃ ID " + routeId + " РЅРµ РЅР°Р№РґРµРЅ");
     }
-    if (FindClientById(client->GetId()) != nullptr)
+    if (!HasTransport(transport.GetId()))
     {
-        throw std::invalid_argument("Клиент с ID " + client->GetId() + " уже зарегистрирован");
+        transports.push_back(std::shared_ptr<Transport>(transport.Clone()));
+    }
+    if (!IsTransportAssignedToRoute(routeId, transport.GetId()))
+    {
+        routeTransportIds[routeId].push_back(transport.GetId());
+    }
+}
+
+void TransportCompany::AddClient(const Client& client)
+{
+    if (HasClient(client.GetId()))
+    {
+        throw std::invalid_argument("РљР»РёРµРЅС‚ СЃ ID " + client.GetId() + " СѓР¶Рµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ");
     }
     clients.push_back(client);
 }
 
 void TransportCompany::RegisterOrder(const CargoOrder& order)
 {
-    if (order.GetRoute() == nullptr || order.GetTransport() == nullptr || order.GetClient() == nullptr)
+    if (!order.HasTransport() || order.GetId() <= 0)
     {
-        throw std::invalid_argument("Заказ должен содержать валидные маршрут, транспорт и клиента");
+        throw std::invalid_argument("Р—Р°РєР°Р· РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РєРѕСЂСЂРµРєС‚РЅРѕ Р·Р°РїРѕР»РЅРµРЅ Рё СЃРѕРґРµСЂР¶Р°С‚СЊ С‚СЂР°РЅСЃРїРѕСЂС‚");
     }
-    const std::string& routeId = order.GetRoute()->GetId();
-    if (FindRouteById(routeId) == nullptr)
+    const std::string& routeId = order.GetRoute().GetId();
+    if (!HasRoute(routeId))
     {
-        throw std::invalid_argument("Маршрут заказа " + routeId + " не обслуживается компанией");
+        throw std::invalid_argument("РњР°СЂС€СЂСѓС‚ Р·Р°РєР°Р·Р° " + routeId + " РЅРµ РѕР±СЃР»СѓР¶РёРІР°РµС‚СЃСЏ РєРѕРјРїР°РЅРёРµР№");
     }
-    if (!IsTransportAssignedToRoute(routeId, order.GetTransport()))
+    if (!IsTransportAssignedToRoute(routeId, order.GetTransport().GetId()))
     {
-        throw std::invalid_argument("Выбранный транспорт не назначен на маршрут " + routeId);
+        throw std::invalid_argument("Р’С‹Р±СЂР°РЅРЅС‹Р№ С‚СЂР°РЅСЃРїРѕСЂС‚ РЅРµ РЅР°Р·РЅР°С‡РµРЅ РЅР° РјР°СЂС€СЂСѓС‚ " + routeId);
     }
-    for (const auto& existing : orders)
+    for (const CargoOrder& existing : orders)
     {
         if (existing.GetId() == order.GetId())
         {
-            throw std::invalid_argument("Заказ с ID " + std::to_string(order.GetId()) + " уже существует");
+            throw std::invalid_argument("Р—Р°РєР°Р· СЃ ID " + std::to_string(order.GetId()) + " СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚");
         }
     }
     orders.push_back(order);
 }
 
-Route* TransportCompany::FindRouteById(const std::string& routeId) const
+bool TransportCompany::HasRoute(const std::string& routeId) const
 {
-    for (Route* route : routes)
+    return FindRouteById(routeId).has_value();
+}
+
+bool TransportCompany::HasTransport(const std::string& transportId) const
+{
+    return static_cast<bool>(FindTransportById(transportId));
+}
+
+bool TransportCompany::HasClient(const std::string& clientId) const
+{
+    return FindClientById(clientId).has_value();
+}
+
+std::optional<Route> TransportCompany::FindRouteById(const std::string& routeId) const
+{
+    for (const Route& route : routes)
     {
-        if (route->GetId() == routeId)
+        if (route.GetId() == routeId)
         {
             return route;
         }
     }
-    return nullptr;
+    return std::nullopt;
 }
 
-Transport* TransportCompany::FindTransportById(const std::string& transportId) const
+std::shared_ptr<const Transport> TransportCompany::FindTransportById(const std::string& transportId) const
 {
-    for (Transport* transport : transports)
+    for (const std::shared_ptr<Transport>& transport : transports)
     {
-        if (transport->GetId() == transportId)
+        if (transport && transport->GetId() == transportId)
         {
             return transport;
         }
@@ -201,25 +232,25 @@ Transport* TransportCompany::FindTransportById(const std::string& transportId) c
     return nullptr;
 }
 
-Client* TransportCompany::FindClientById(const std::string& clientId) const
+std::optional<Client> TransportCompany::FindClientById(const std::string& clientId) const
 {
-    for (Client* client : clients)
+    for (const Client& client : clients)
     {
-        if (client->GetId() == clientId)
+        if (client.GetId() == clientId)
         {
             return client;
         }
     }
-    return nullptr;
+    return std::nullopt;
 }
 
 std::vector<std::pair<std::string, double>> TransportCompany::GetRoutesWithPrices() const
 {
     std::vector<std::pair<std::string, double>> result;
     result.reserve(routes.size());
-    for (const Route* route : routes)
+    for (const Route& route : routes)
     {
-        result.emplace_back("[" + route->GetId() + "] " + route->GetRouteName(), route->GetBasePrice());
+        result.emplace_back("[" + route.GetId() + "] " + route.GetRouteName(), route.GetBasePrice());
     }
     return result;
 }
@@ -228,46 +259,58 @@ std::string TransportCompany::GetRoutesWithPricesReport() const
 {
     if (routes.empty())
     {
-        return "Компания не обслуживает маршруты.";
+        return "РљРѕРјРїР°РЅРёСЏ РЅРµ РѕР±СЃР»СѓР¶РёРІР°РµС‚ РјР°СЂС€СЂСѓС‚С‹.";
     }
-    std::string report = "Маршруты компании \"" + name + "\":\n";
-    for (const Route* route : routes)
+    std::string report = "РњР°СЂС€СЂСѓС‚С‹ РєРѕРјРїР°РЅРёРё \"" + name + "\":\n";
+    for (const Route& route : routes)
     {
-        report += "  - " + route->ToString() + "\n";
+        report += "  - " + route.ToString() + "\n";
     }
     return report;
 }
 
-std::vector<Transport*> TransportCompany::GetTransportsByRoute(const std::string& routeId) const
+std::vector<std::shared_ptr<const Transport>> TransportCompany::GetTransportsByRoute(const std::string& routeId) const
 {
-    if (FindRouteById(routeId) == nullptr)
+    if (!HasRoute(routeId))
     {
-        throw std::invalid_argument("Маршрут с ID " + routeId + " не найден");
+        throw std::invalid_argument("РњР°СЂС€СЂСѓС‚ СЃ ID " + routeId + " РЅРµ РЅР°Р№РґРµРЅ");
     }
-    const auto it = routeTransports.find(routeId);
-    if (it == routeTransports.end())
+
+    std::vector<std::shared_ptr<const Transport>> result;
+    const auto it = routeTransportIds.find(routeId);
+    if (it == routeTransportIds.end())
     {
-        return {};
+        return result;
     }
-    return it->second;
+
+    result.reserve(it->second.size());
+    for (const std::string& transportId : it->second)
+    {
+        const std::shared_ptr<const Transport> found = FindTransportById(transportId);
+        if (found)
+        {
+            result.push_back(found);
+        }
+    }
+    return result;
 }
 
 std::string TransportCompany::GetTransportsByRouteReport(const std::string& routeId) const
 {
-    const Route* route = FindRouteById(routeId);
-    if (route == nullptr)
+    const std::optional<Route> route = FindRouteById(routeId);
+    if (!route.has_value())
     {
-        throw std::invalid_argument("Маршрут с ID " + routeId + " не найден");
+        throw std::invalid_argument("РњР°СЂС€СЂСѓС‚ СЃ ID " + routeId + " РЅРµ РЅР°Р№РґРµРЅ");
     }
 
-    const std::vector<Transport*> assigned = GetTransportsByRoute(routeId);
-    std::string report = "Транспорт на маршруте [" + route->GetId() + "] " + route->GetRouteName() + ":\n";
+    const std::vector<std::shared_ptr<const Transport>> assigned = GetTransportsByRoute(routeId);
+    std::string report = "РўСЂР°РЅСЃРїРѕСЂС‚ РЅР° РјР°СЂС€СЂСѓС‚Рµ [" + route->GetId() + "] " + route->GetRouteName() + ":\n";
     if (assigned.empty())
     {
-        report += "  (нет назначенного транспорта)\n";
+        report += "  (РЅРµС‚ РЅР°Р·РЅР°С‡РµРЅРЅРѕРіРѕ С‚СЂР°РЅСЃРїРѕСЂС‚Р°)\n";
         return report;
     }
-    for (const Transport* transport : assigned)
+    for (const std::shared_ptr<const Transport>& transport : assigned)
     {
         report += "  - " + transport->ToString() + "\n";
     }
@@ -276,9 +319,9 @@ std::string TransportCompany::GetTransportsByRouteReport(const std::string& rout
 
 std::vector<std::string> TransportCompany::GetDeliveryOptionsByRoute(const std::string& routeId) const
 {
-    const std::vector<Transport*> assigned = GetTransportsByRoute(routeId);
+    const std::vector<std::shared_ptr<const Transport>> assigned = GetTransportsByRoute(routeId);
     std::set<std::string> uniqueOptions;
-    for (const Transport* transport : assigned)
+    for (const std::shared_ptr<const Transport>& transport : assigned)
     {
         uniqueOptions.insert(transport->GetTransportType());
     }
@@ -287,17 +330,17 @@ std::vector<std::string> TransportCompany::GetDeliveryOptionsByRoute(const std::
 
 std::string TransportCompany::GetDeliveryOptionsByRouteReport(const std::string& routeId) const
 {
-    const Route* route = FindRouteById(routeId);
-    if (route == nullptr)
+    const std::optional<Route> route = FindRouteById(routeId);
+    if (!route.has_value())
     {
-        throw std::invalid_argument("Маршрут с ID " + routeId + " не найден");
+        throw std::invalid_argument("РњР°СЂС€СЂСѓС‚ СЃ ID " + routeId + " РЅРµ РЅР°Р№РґРµРЅ");
     }
 
     const std::vector<std::string> options = GetDeliveryOptionsByRoute(routeId);
-    std::string report = "Варианты доставки по маршруту [" + route->GetId() + "] " + route->GetRouteName() + ": ";
+    std::string report = "Р’Р°СЂРёР°РЅС‚С‹ РґРѕСЃС‚Р°РІРєРё РїРѕ РјР°СЂС€СЂСѓС‚Сѓ [" + route->GetId() + "] " + route->GetRouteName() + ": ";
     if (options.empty())
     {
-        return report + "нет доступных вариантов.";
+        return report + "РЅРµС‚ РґРѕСЃС‚СѓРїРЅС‹С… РІР°СЂРёР°РЅС‚РѕРІ.";
     }
     for (size_t i = 0; i < options.size(); ++i)
     {
@@ -311,57 +354,49 @@ std::string TransportCompany::GetDeliveryOptionsByRouteReport(const std::string&
 }
 
 double TransportCompany::CalculateCargoDeliveryCost(const std::string& routeId,
-    const Transport* transport,
-    const Client* client,
-    const double weightTons) const
+                                                    const Transport& transport,
+                                                    const Client& client,
+                                                    const double weightTons) const
 {
-    const Route* route = FindRouteById(routeId);
-    if (route == nullptr)
+    const std::optional<Route> route = FindRouteById(routeId);
+    if (!route.has_value())
     {
-        throw std::invalid_argument("Маршрут с ID " + routeId + " не найден");
+        throw std::invalid_argument("РњР°СЂС€СЂСѓС‚ СЃ ID " + routeId + " РЅРµ РЅР°Р№РґРµРЅ");
     }
-    if (transport == nullptr)
+    if (!IsTransportAssignedToRoute(routeId, transport.GetId()))
     {
-        throw std::invalid_argument("Транспорт не может быть nullptr");
-    }
-    if (client == nullptr)
-    {
-        throw std::invalid_argument("Клиент не может быть nullptr");
-    }
-    if (!IsTransportAssignedToRoute(routeId, transport))
-    {
-        throw std::invalid_argument("Транспорт " + transport->GetId() + " не обслуживает маршрут " + routeId);
+        throw std::invalid_argument("РўСЂР°РЅСЃРїРѕСЂС‚ " + transport.GetId() + " РЅРµ РѕР±СЃР»СѓР¶РёРІР°РµС‚ РјР°СЂС€СЂСѓС‚ " + routeId);
     }
 
     const double rawCost = route->GetBasePrice() +
-        transport->CalculateDeliveryCost(route->GetDistanceKm(), weightTons);
-    const double discountFactor = 1.0 - client->GetEffectiveDiscountPercent() / 100.0;
+                           transport.CalculateDeliveryCost(route->GetDistanceKm(), weightTons);
+    const double discountFactor = 1.0 - client.GetEffectiveDiscountPercent() / 100.0;
     return rawCost * discountFactor;
 }
 
 double TransportCompany::CalculateOrderCost(const int orderId) const
 {
-    for (const auto& order : orders)
+    for (const CargoOrder& order : orders)
     {
         if (order.GetId() == orderId)
         {
             return order.CalculateCost();
         }
     }
-    throw std::invalid_argument("Заказ с ID " + std::to_string(orderId) + " не найден");
+    throw std::invalid_argument("Р—Р°РєР°Р· СЃ ID " + std::to_string(orderId) + " РЅРµ РЅР°Р№РґРµРЅ");
 }
 
 double TransportCompany::GetRouteFreightTurnover(const std::string& routeId) const
 {
-    if (FindRouteById(routeId) == nullptr)
+    if (!HasRoute(routeId))
     {
-        throw std::invalid_argument("Маршрут с ID " + routeId + " не найден");
+        throw std::invalid_argument("РњР°СЂС€СЂСѓС‚ СЃ ID " + routeId + " РЅРµ РЅР°Р№РґРµРЅ");
     }
 
     double totalTurnover = 0.0;
-    for (const auto& order : orders)
+    for (const CargoOrder& order : orders)
     {
-        if (order.GetRoute() != nullptr && order.GetRoute()->GetId() == routeId)
+        if (order.GetRoute().GetId() == routeId)
         {
             totalTurnover += order.GetFreightTurnover();
         }
@@ -371,15 +406,15 @@ double TransportCompany::GetRouteFreightTurnover(const std::string& routeId) con
 
 double TransportCompany::GetRouteTotalCargoWeight(const std::string& routeId) const
 {
-    if (FindRouteById(routeId) == nullptr)
+    if (!HasRoute(routeId))
     {
-        throw std::invalid_argument("Маршрут с ID " + routeId + " не найден");
+        throw std::invalid_argument("РњР°СЂС€СЂСѓС‚ СЃ ID " + routeId + " РЅРµ РЅР°Р№РґРµРЅ");
     }
 
     double totalWeight = 0.0;
-    for (const auto& order : orders)
+    for (const CargoOrder& order : orders)
     {
-        if (order.GetRoute() != nullptr && order.GetRoute()->GetId() == routeId)
+        if (order.GetRoute().GetId() == routeId)
         {
             totalWeight += order.GetWeightTons();
         }
@@ -389,28 +424,28 @@ double TransportCompany::GetRouteTotalCargoWeight(const std::string& routeId) co
 
 std::string TransportCompany::GetRouteFreightTurnoverReport(const std::string& routeId) const
 {
-    const Route* route = FindRouteById(routeId);
-    if (route == nullptr)
+    const std::optional<Route> route = FindRouteById(routeId);
+    if (!route.has_value())
     {
-        throw std::invalid_argument("Маршрут с ID " + routeId + " не найден");
+        throw std::invalid_argument("РњР°СЂС€СЂСѓС‚ СЃ ID " + routeId + " РЅРµ РЅР°Р№РґРµРЅ");
     }
 
-    return "Грузооборот по маршруту [" + route->GetId() + "] " + route->GetRouteName() +
-        ": " + Transport::FormatDouble(GetRouteFreightTurnover(routeId)) + " т*км" +
-        " (перевезено грузов: " + Transport::FormatDouble(GetRouteTotalCargoWeight(routeId)) + " т)";
+    return "Р“СЂСѓР·РѕРѕР±РѕСЂРѕС‚ РїРѕ РјР°СЂС€СЂСѓС‚Сѓ [" + route->GetId() + "] " + route->GetRouteName() +
+           ": " + Transport::FormatDouble(GetRouteFreightTurnover(routeId)) + " С‚*РєРј" +
+           " (РїРµСЂРµРІРµР·РµРЅРѕ РіСЂСѓР·РѕРІ: " + Transport::FormatDouble(GetRouteTotalCargoWeight(routeId)) + " С‚)";
 }
 
-const std::vector<Route*>& TransportCompany::GetRoutes() const
+const std::vector<Route>& TransportCompany::GetRoutes() const
 {
     return routes;
 }
 
-const std::vector<Transport*>& TransportCompany::GetTransports() const
+const std::vector<std::shared_ptr<Transport>>& TransportCompany::GetTransports() const
 {
     return transports;
 }
 
-const std::vector<Client*>& TransportCompany::GetClients() const
+const std::vector<Client>& TransportCompany::GetClients() const
 {
     return clients;
 }
