@@ -1,9 +1,9 @@
-#pragma once
+п»ї#pragma once
 
 #include "Transport.h"
 
 /**
- * @brief Класс железнодорожного грузового транспорта
+ * @brief РљР»Р°СЃСЃ Р¶РµР»РµР·РЅРѕРґРѕСЂРѕР¶РЅРѕРіРѕ РіСЂСѓР·РѕРІРѕРіРѕ С‚СЂР°РЅСЃРїРѕСЂС‚Р°
  */
 class RailTransport : public Transport
 {
@@ -13,19 +13,19 @@ private:
 
 public:
     /**
-     * @brief Конструктор по умолчанию
+     * @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
      */
     RailTransport();
 
     /**
-     * @brief Конструктор с параметрами
-     * @param id Идентификатор состава
-     * @param name Серия локомотива / название состава
-     * @param capacityTons Грузоподъемность (т)
-     * @param speedKmH Средняя скорость (км/ч)
-     * @param ratePerTonKm Тариф за тонно-километр
-     * @param wagonCount Количество вагонов
-     * @param stationHandlingFee Станционный сбор (руб.)
+     * @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ РїР°СЂР°РјРµС‚СЂР°РјРё
+     * @param id РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃРѕСЃС‚Р°РІР°
+     * @param name РЎРµСЂРёСЏ Р»РѕРєРѕРјРѕС‚РёРІР° / РЅР°Р·РІР°РЅРёРµ СЃРѕСЃС‚Р°РІР°
+     * @param capacityTons Р“СЂСѓР·РѕРїРѕРґСЉРµРјРЅРѕСЃС‚СЊ (С‚)
+     * @param speedKmH РЎСЂРµРґРЅСЏСЏ СЃРєРѕСЂРѕСЃС‚СЊ (РєРј/С‡)
+     * @param ratePerTonKm РўР°СЂРёС„ Р·Р° С‚РѕРЅРЅРѕ-РєРёР»РѕРјРµС‚СЂ
+     * @param wagonCount РљРѕР»РёС‡РµСЃС‚РІРѕ РІР°РіРѕРЅРѕРІ
+     * @param stationHandlingFee РЎС‚Р°РЅС†РёРѕРЅРЅС‹Р№ СЃР±РѕСЂ (СЂСѓР±.)
      */
     RailTransport(const std::string& id,
         const std::string& name,

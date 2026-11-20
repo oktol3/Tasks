@@ -1,9 +1,9 @@
-#pragma once
+п»ї#pragma once
 
 #include "Transport.h"
 
 /**
- * @brief Класс речного грузового транспорта
+ * @brief РљР»Р°СЃСЃ СЂРµС‡РЅРѕРіРѕ РіСЂСѓР·РѕРІРѕРіРѕ С‚СЂР°РЅСЃРїРѕСЂС‚Р°
  */
 class RiverTransport : public Transport
 {
@@ -13,19 +13,19 @@ private:
 
 public:
     /**
-     * @brief Конструктор по умолчанию
+     * @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
      */
     RiverTransport();
 
     /**
-     * @brief Конструктор с параметрами
-     * @param id Идентификатор судна
-     * @param name Название речного судна
-     * @param capacityTons Грузоподъемность (т)
-     * @param speedKmH Средняя скорость (км/ч)
-     * @param ratePerTonKm Тариф за тонно-километр
-     * @param draftMeters Осадка судна (м)
-     * @param lockPassageFee Сбор за прохождение шлюзов (руб.)
+     * @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ РїР°СЂР°РјРµС‚СЂР°РјРё
+     * @param id РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЃСѓРґРЅР°
+     * @param name РќР°Р·РІР°РЅРёРµ СЂРµС‡РЅРѕРіРѕ СЃСѓРґРЅР°
+     * @param capacityTons Р“СЂСѓР·РѕРїРѕРґСЉРµРјРЅРѕСЃС‚СЊ (С‚)
+     * @param speedKmH РЎСЂРµРґРЅСЏСЏ СЃРєРѕСЂРѕСЃС‚СЊ (РєРј/С‡)
+     * @param ratePerTonKm РўР°СЂРёС„ Р·Р° С‚РѕРЅРЅРѕ-РєРёР»РѕРјРµС‚СЂ
+     * @param draftMeters РћСЃР°РґРєР° СЃСѓРґРЅР° (Рј)
+     * @param lockPassageFee РЎР±РѕСЂ Р·Р° РїСЂРѕС…РѕР¶РґРµРЅРёРµ С€Р»СЋР·РѕРІ (СЂСѓР±.)
      */
     RiverTransport(const std::string& id,
         const std::string& name,

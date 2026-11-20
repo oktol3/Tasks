@@ -1,9 +1,9 @@
-#pragma once
+п»ї#pragma once
 
 #include "Transport.h"
 
 /**
- * @brief Класс морского грузового транспорта
+ * @brief РљР»Р°СЃСЃ РјРѕСЂСЃРєРѕРіРѕ РіСЂСѓР·РѕРІРѕРіРѕ С‚СЂР°РЅСЃРїРѕСЂС‚Р°
  */
 class SeaTransport : public Transport
 {
@@ -13,19 +13,19 @@ private:
 
 public:
     /**
-     * @brief Конструктор по умолчанию
+     * @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
      */
     SeaTransport();
 
     /**
-     * @brief Конструктор с параметрами
-     * @param id Идентификатор морского судна
-     * @param name Название судна
-     * @param capacityTons Грузоподъемность (т)
-     * @param speedKmH Средняя скорость (км/ч)
-     * @param ratePerTonKm Тариф за тонно-километр
-     * @param containerCapacityTeu Контейнеровместимость (TEU)
-     * @param portFee Портовый сбор (руб.)
+     * @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ РїР°СЂР°РјРµС‚СЂР°РјРё
+     * @param id РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РјРѕСЂСЃРєРѕРіРѕ СЃСѓРґРЅР°
+     * @param name РќР°Р·РІР°РЅРёРµ СЃСѓРґРЅР°
+     * @param capacityTons Р“СЂСѓР·РѕРїРѕРґСЉРµРјРЅРѕСЃС‚СЊ (С‚)
+     * @param speedKmH РЎСЂРµРґРЅСЏСЏ СЃРєРѕСЂРѕСЃС‚СЊ (РєРј/С‡)
+     * @param ratePerTonKm РўР°СЂРёС„ Р·Р° С‚РѕРЅРЅРѕ-РєРёР»РѕРјРµС‚СЂ
+     * @param containerCapacityTeu РљРѕРЅС‚РµР№РЅРµСЂРѕРІРјРµСЃС‚РёРјРѕСЃС‚СЊ (TEU)
+     * @param portFee РџРѕСЂС‚РѕРІС‹Р№ СЃР±РѕСЂ (СЂСѓР±.)
      */
     SeaTransport(const std::string& id,
         const std::string& name,

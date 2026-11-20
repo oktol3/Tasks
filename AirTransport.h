@@ -1,9 +1,9 @@
-#pragma once
+п»ї#pragma once
 
 #include "Transport.h"
 
 /**
- * @brief Класс воздушного грузового транспорта
+ * @brief РљР»Р°СЃСЃ РІРѕР·РґСѓС€РЅРѕРіРѕ РіСЂСѓР·РѕРІРѕРіРѕ С‚СЂР°РЅСЃРїРѕСЂС‚Р°
  */
 class AirTransport : public Transport
 {
@@ -13,19 +13,19 @@ private:
 
 public:
     /**
-     * @brief Конструктор по умолчанию
+     * @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
      */
     AirTransport();
 
     /**
-     * @brief Конструктор с параметрами
-     * @param id Идентификатор воздушного судна
-     * @param name Модель воздушного судна
-     * @param capacityTons Грузоподъемность (т)
-     * @param speedKmH Крейсерская скорость (км/ч)
-     * @param ratePerTonKm Тариф за тонно-километр
-     * @param maxAltitudeMeters Максимальная высота полета (м)
-     * @param airportFee Аэропортовый сбор (руб.)
+     * @brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ РїР°СЂР°РјРµС‚СЂР°РјРё
+     * @param id РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РІРѕР·РґСѓС€РЅРѕРіРѕ СЃСѓРґРЅР°
+     * @param name РњРѕРґРµР»СЊ РІРѕР·РґСѓС€РЅРѕРіРѕ СЃСѓРґРЅР°
+     * @param capacityTons Р“СЂСѓР·РѕРїРѕРґСЉРµРјРЅРѕСЃС‚СЊ (С‚)
+     * @param speedKmH РљСЂРµР№СЃРµСЂСЃРєР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ (РєРј/С‡)
+     * @param ratePerTonKm РўР°СЂРёС„ Р·Р° С‚РѕРЅРЅРѕ-РєРёР»РѕРјРµС‚СЂ
+     * @param maxAltitudeMeters РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РІС‹СЃРѕС‚Р° РїРѕР»РµС‚Р° (Рј)
+     * @param airportFee РђСЌСЂРѕРїРѕСЂС‚РѕРІС‹Р№ СЃР±РѕСЂ (СЂСѓР±.)
      */
     AirTransport(const std::string& id,
         const std::string& name,
@@ -43,22 +43,22 @@ public:
     AirTransport& operator=(AirTransport&& other) noexcept;
 
     /**
-     * @brief Получить максимальную высоту полета (м)
+     * @brief РџРѕР»СѓС‡РёС‚СЊ РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РІС‹СЃРѕС‚Сѓ РїРѕР»РµС‚Р° (Рј)
      */
     double GetMaxAltitudeMeters() const;
 
     /**
-     * @brief Установить максимальную высоту полета (м)
+     * @brief РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РјР°РєСЃРёРјР°Р»СЊРЅСѓСЋ РІС‹СЃРѕС‚Сѓ РїРѕР»РµС‚Р° (Рј)
      */
     void SetMaxAltitudeMeters(double altitude);
 
     /**
-     * @brief Получить аэропортовый сбор (руб.)
+     * @brief РџРѕР»СѓС‡РёС‚СЊ Р°СЌСЂРѕРїРѕСЂС‚РѕРІС‹Р№ СЃР±РѕСЂ (СЂСѓР±.)
      */
     double GetAirportFee() const;
 
     /**
-     * @brief Установить аэропортовый сбор (руб.)
+     * @brief РЈСЃС‚Р°РЅРѕРІРёС‚СЊ Р°СЌСЂРѕРїРѕСЂС‚РѕРІС‹Р№ СЃР±РѕСЂ (СЂСѓР±.)
      */
     void SetAirportFee(double fee);
 
