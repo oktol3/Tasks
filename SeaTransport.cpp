@@ -1,6 +1,7 @@
 #include "SeaTransport.h"
 
 #include <stdexcept>
+#include <typeinfo>
 #include <utility>
 
 SeaTransport::SeaTransport()
@@ -9,30 +10,30 @@ SeaTransport::SeaTransport()
 }
 
 SeaTransport::SeaTransport(const std::string& id,
-    const std::string& name,
-    const double capacityTons,
-    const double speedKmH,
-    const double ratePerTonKm,
-    const int containerCapacityTeu,
-    const double portFee)
+                           const std::string& name,
+                           const double capacityTons,
+                           const double speedKmH,
+                           const double ratePerTonKm,
+                           const int containerCapacityTeu,
+                           const double portFee)
     : Transport(id, name, capacityTons, speedKmH, ratePerTonKm),
-    containerCapacityTeu(containerCapacityTeu),
-    portFee(portFee)
+      containerCapacityTeu(containerCapacityTeu),
+      portFee(portFee)
 {
     if (this->containerCapacityTeu <= 0)
     {
-        throw std::invalid_argument("Контейнеровместимость должна быть больше нуля");
+        throw std::invalid_argument("РљРѕРЅС‚РµР№РЅРµСЂРѕРІРјРµСЃС‚РёРјРѕСЃС‚СЊ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
     }
     if (this->portFee < 0.0)
     {
-        throw std::invalid_argument("Портовый сбор не может быть отрицательным");
+        throw std::invalid_argument("РџРѕСЂС‚РѕРІС‹Р№ СЃР±РѕСЂ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
     }
 }
 
 SeaTransport::SeaTransport(const SeaTransport& other)
     : Transport(other),
-    containerCapacityTeu(other.containerCapacityTeu),
-    portFee(other.portFee)
+      containerCapacityTeu(other.containerCapacityTeu),
+      portFee(other.portFee)
 {
 }
 
@@ -49,8 +50,8 @@ SeaTransport& SeaTransport::operator=(const SeaTransport& other)
 
 SeaTransport::SeaTransport(SeaTransport&& other) noexcept
     : Transport(std::move(other)),
-    containerCapacityTeu(other.containerCapacityTeu),
-    portFee(other.portFee)
+      containerCapacityTeu(other.containerCapacityTeu),
+      portFee(other.portFee)
 {
     other.containerCapacityTeu = 0;
     other.portFee = 0.0;
@@ -78,7 +79,7 @@ void SeaTransport::SetContainerCapacityTeu(const int capacityTeu)
 {
     if (capacityTeu <= 0)
     {
-        throw std::invalid_argument("Контейнеровместимость должна быть больше нуля");
+        throw std::invalid_argument("РљРѕРЅС‚РµР№РЅРµСЂРѕРІРјРµСЃС‚РёРјРѕСЃС‚СЊ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
     }
     containerCapacityTeu = capacityTeu;
 }
@@ -92,14 +93,32 @@ void SeaTransport::SetPortFee(const double fee)
 {
     if (fee < 0.0)
     {
-        throw std::invalid_argument("Портовый сбор не может быть отрицательным");
+        throw std::invalid_argument("РџРѕСЂС‚РѕРІС‹Р№ СЃР±РѕСЂ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
     }
     portFee = fee;
 }
 
 std::string SeaTransport::GetTransportType() const
 {
-    return "Морской";
+    return "РњРѕСЂСЃРєРѕР№";
+}
+
+std::unique_ptr<Transport> SeaTransport::Clone() const
+{
+    return std::make_unique<SeaTransport>(*this);
+}
+
+bool SeaTransport::Equals(const Transport& other) const
+{
+    try
+    {
+        const SeaTransport& derived = dynamic_cast<const SeaTransport&>(other);
+        return *this == derived;
+    }
+    catch (const std::bad_cast&)
+    {
+        return false;
+    }
 }
 
 double SeaTransport::CalculateDeliveryCost(const double distanceKm, const double weightTons) const
@@ -110,15 +129,15 @@ double SeaTransport::CalculateDeliveryCost(const double distanceKm, const double
 std::string SeaTransport::ToString() const
 {
     return Transport::ToString() +
-        " | Вместимость: " + std::to_string(containerCapacityTeu) + " TEU" +
-        " | Портовый сбор: " + FormatDouble(portFee) + " руб.";
+           " | Р’РјРµСЃС‚РёРјРѕСЃС‚СЊ: " + std::to_string(containerCapacityTeu) + " TEU" +
+           " | РџРѕСЂС‚РѕРІС‹Р№ СЃР±РѕСЂ: " + FormatDouble(portFee) + " СЂСѓР±.";
 }
 
 bool SeaTransport::operator==(const SeaTransport& other) const
 {
     return Transport::operator==(other) &&
-        containerCapacityTeu == other.containerCapacityTeu &&
-        AreEqual(portFee, other.portFee);
+           containerCapacityTeu == other.containerCapacityTeu &&
+           AreEqual(portFee, other.portFee);
 }
 
 bool SeaTransport::operator!=(const SeaTransport& other) const
