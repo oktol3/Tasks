@@ -1,6 +1,7 @@
 #include "RailTransport.h"
 
 #include <stdexcept>
+#include <typeinfo>
 #include <utility>
 
 RailTransport::RailTransport()
@@ -9,30 +10,30 @@ RailTransport::RailTransport()
 }
 
 RailTransport::RailTransport(const std::string& id,
-    const std::string& name,
-    const double capacityTons,
-    const double speedKmH,
-    const double ratePerTonKm,
-    const int wagonCount,
-    const double stationHandlingFee)
+                             const std::string& name,
+                             const double capacityTons,
+                             const double speedKmH,
+                             const double ratePerTonKm,
+                             const int wagonCount,
+                             const double stationHandlingFee)
     : Transport(id, name, capacityTons, speedKmH, ratePerTonKm),
-    wagonCount(wagonCount),
-    stationHandlingFee(stationHandlingFee)
+      wagonCount(wagonCount),
+      stationHandlingFee(stationHandlingFee)
 {
     if (this->wagonCount <= 0)
     {
-        throw std::invalid_argument("Количество вагонов должно быть больше нуля");
+        throw std::invalid_argument("РљРѕР»РёС‡РµСЃС‚РІРѕ РІР°РіРѕРЅРѕРІ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
     }
     if (this->stationHandlingFee < 0.0)
     {
-        throw std::invalid_argument("Станционный сбор не может быть отрицательным");
+        throw std::invalid_argument("РЎС‚Р°РЅС†РёРѕРЅРЅС‹Р№ СЃР±РѕСЂ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
     }
 }
 
 RailTransport::RailTransport(const RailTransport& other)
     : Transport(other),
-    wagonCount(other.wagonCount),
-    stationHandlingFee(other.stationHandlingFee)
+      wagonCount(other.wagonCount),
+      stationHandlingFee(other.stationHandlingFee)
 {
 }
 
@@ -49,8 +50,8 @@ RailTransport& RailTransport::operator=(const RailTransport& other)
 
 RailTransport::RailTransport(RailTransport&& other) noexcept
     : Transport(std::move(other)),
-    wagonCount(other.wagonCount),
-    stationHandlingFee(other.stationHandlingFee)
+      wagonCount(other.wagonCount),
+      stationHandlingFee(other.stationHandlingFee)
 {
     other.wagonCount = 0;
     other.stationHandlingFee = 0.0;
@@ -78,7 +79,7 @@ void RailTransport::SetWagonCount(const int count)
 {
     if (count <= 0)
     {
-        throw std::invalid_argument("Количество вагонов должно быть больше нуля");
+        throw std::invalid_argument("РљРѕР»РёС‡РµСЃС‚РІРѕ РІР°РіРѕРЅРѕРІ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
     }
     wagonCount = count;
 }
@@ -92,14 +93,32 @@ void RailTransport::SetStationHandlingFee(const double fee)
 {
     if (fee < 0.0)
     {
-        throw std::invalid_argument("Станционный сбор не может быть отрицательным");
+        throw std::invalid_argument("РЎС‚Р°РЅС†РёРѕРЅРЅС‹Р№ СЃР±РѕСЂ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
     }
     stationHandlingFee = fee;
 }
 
 std::string RailTransport::GetTransportType() const
 {
-    return "Железнодорожный";
+    return "Р–РµР»РµР·РЅРѕРґРѕСЂРѕР¶РЅС‹Р№";
+}
+
+std::unique_ptr<Transport> RailTransport::Clone() const
+{
+    return std::make_unique<RailTransport>(*this);
+}
+
+bool RailTransport::Equals(const Transport& other) const
+{
+    try
+    {
+        const RailTransport& derived = dynamic_cast<const RailTransport&>(other);
+        return *this == derived;
+    }
+    catch (const std::bad_cast&)
+    {
+        return false;
+    }
 }
 
 double RailTransport::CalculateDeliveryCost(const double distanceKm, const double weightTons) const
@@ -110,15 +129,15 @@ double RailTransport::CalculateDeliveryCost(const double distanceKm, const doubl
 std::string RailTransport::ToString() const
 {
     return Transport::ToString() +
-        " | Вагонов: " + std::to_string(wagonCount) +
-        " | Станционный сбор: " + FormatDouble(stationHandlingFee) + " руб.";
+           " | Р’Р°РіРѕРЅРѕРІ: " + std::to_string(wagonCount) +
+           " | РЎС‚Р°РЅС†РёРѕРЅРЅС‹Р№ СЃР±РѕСЂ: " + FormatDouble(stationHandlingFee) + " СЂСѓР±.";
 }
 
 bool RailTransport::operator==(const RailTransport& other) const
 {
     return Transport::operator==(other) &&
-        wagonCount == other.wagonCount &&
-        AreEqual(stationHandlingFee, other.stationHandlingFee);
+           wagonCount == other.wagonCount &&
+           AreEqual(stationHandlingFee, other.stationHandlingFee);
 }
 
 bool RailTransport::operator!=(const RailTransport& other) const
