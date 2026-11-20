@@ -1,189 +1,57 @@
 #pragma once
 
-#include <string>
+#include "Transport.h"
 
 /**
- * @brief Абстрактный базовый класс для представления транспортного средства
+ * @brief Класс автомобильного грузового транспорта
  */
-class Transport
+class RoadTransport : public Transport
 {
-protected:
-    std::string id;
-    std::string name;
-    double capacityTons;
-    double speedKmH;
-    double ratePerTonKm;
-
-    /**
-     * @brief Проверка, что строка не пустая и не состоит только из пробелов
-     * @param value Проверяемая строка
-     * @param fieldName Название поля для текста исключения
-     */
-    static void ValidateNonEmpty(const std::string& value, const std::string& fieldName);
-
-    /**
-     * @brief Проверка равенства двух вещественных чисел с заданной точностью
-     * @param lhs Первое число
-     * @param rhs Второе число
-     * @return true, если числа равны с точностью 1e-6
-     */
-    static bool AreEqual(double lhs, double rhs);
-
-    /**
-     * @brief Конструктор по умолчанию (для классов-наследников)
-     */
-    Transport();
-
-    /**
-     * @brief Конструктор с параметрами (для классов-наследников)
-     * @param id Идентификатор транспорта
-     * @param name Название / модель транспорта
-     * @param capacityTons Грузоподъемность (т)
-     * @param speedKmH Средняя скорость (км/ч)
-     * @param ratePerTonKm Тариф за тонно-километр (руб.)
-     */
-    Transport(const std::string& id,
-        const std::string& name,
-        double capacityTons,
-        double speedKmH,
-        double ratePerTonKm);
-
-    /**
-     * @brief Конструктор копирования
-     * @param other Копируемый объект
-     */
-    Transport(const Transport& other);
-
-    /**
-     * @brief Оператор присваивания копированием
-     * @param other Присваиваемый объект
-     * @return Ссылка на текущий объект
-     */
-    Transport& operator=(const Transport& other);
-
-    /**
-     * @brief Конструктор перемещения
-     * @param other Перемещаемый объект
-     */
-    Transport(Transport&& other) noexcept;
-
-    /**
-     * @brief Оператор присваивания перемещением
-     * @param other Перемещаемый объект
-     * @return Ссылка на текущий объект
-     */
-    Transport& operator=(Transport&& other) noexcept;
+private:
+    int axleCount;
+    double tollRoadFee;
 
 public:
     /**
-     * @brief Виртуальный деструктор
+     * @brief Конструктор по умолчанию
      */
-    virtual ~Transport() = default;
+    RoadTransport();
 
     /**
-     * @brief Форматирование вещественного числа с двумя знаками после запятой
-     * @param value Вещественное число
-     * @return Строковое представление числа
+     * @brief Конструктор с параметрами
+     * @param id Идентификатор автомобиля
+     * @param name Марка и модель грузовика
+     * @param capacityTons Грузоподъемность (т)
+     * @param speedKmH Средняя скорость (км/ч)
+     * @param ratePerTonKm Тариф за тонно-километр
+     * @param axleCount Количество осей
+     * @param tollRoadFee Сбор за платные участки дорог (руб.)
      */
-    static std::string FormatDouble(double value);
+    RoadTransport(const std::string& id,
+        const std::string& name,
+        double capacityTons,
+        double speedKmH,
+        double ratePerTonKm,
+        int axleCount,
+        double tollRoadFee);
 
-    /**
-     * @brief Получить идентификатор транспорта
-     * @return Константная ссылка на идентификатор
-     */
-    const std::string& GetId() const;
+    ~RoadTransport() override = default;
 
-    /**
-     * @brief Установить идентификатор транспорта
-     * @param newId Новый идентификатор
-     */
-    void SetId(const std::string& newId);
+    RoadTransport(const RoadTransport& other);
+    RoadTransport& operator=(const RoadTransport& other);
+    RoadTransport(RoadTransport&& other) noexcept;
+    RoadTransport& operator=(RoadTransport&& other) noexcept;
 
-    /**
-     * @brief Получить название транспорта
-     * @return Константная ссылка на название
-     */
-    const std::string& GetName() const;
+    int GetAxleCount() const;
+    void SetAxleCount(int count);
 
-    /**
-     * @brief Установить название транспорта
-     * @param newName Новое название
-     */
-    void SetName(const std::string& newName);
+    double GetTollRoadFee() const;
+    void SetTollRoadFee(double fee);
 
-    /**
-     * @brief Получить грузоподъемность (т)
-     * @return Грузоподъемность в тоннах
-     */
-    double GetCapacityTons() const;
+    std::string GetTransportType() const override;
+    double CalculateDeliveryCost(double distanceKm, double weightTons) const override;
+    std::string ToString() const override;
 
-    /**
-     * @brief Установить грузоподъемность (т)
-     * @param capacity Новая грузоподъемность
-     */
-    void SetCapacityTons(double capacity);
-
-    /**
-     * @brief Получить среднюю скорость (км/ч)
-     * @return Средняя скорость
-     */
-    double GetSpeedKmH() const;
-
-    /**
-     * @brief Установить среднюю скорость (км/ч)
-     * @param speed Новая скорость
-     */
-    void SetSpeedKmH(double speed);
-
-    /**
-     * @brief Получить тариф за тонно-километр
-     * @return Тариф (руб. / т*км)
-     */
-    double GetRatePerTonKm() const;
-
-    /**
-     * @brief Установить тариф за тонно-километр
-     * @param rate Новый тариф
-     */
-    void SetRatePerTonKm(double rate);
-
-    /**
-     * @brief Получить тип (способ) доставки транспорта
-     * @return Название вида транспорта (воздушный, морской и т. д.)
-     */
-    virtual std::string GetTransportType() const = 0;
-
-    /**
-     * @brief Рассчитать транспортную составляющую стоимости перевозки груза
-     * @param distanceKm Расстояние маршрута (км)
-     * @param weightTons Вес груза (т)
-     * @return Стоимость перевозки транспортом
-     */
-    virtual double CalculateDeliveryCost(double distanceKm, double weightTons) const;
-
-    /**
-     * @brief Полная строковая информация о транспортном средстве
-     * @return Строка с описанием транспорта
-     */
-    virtual std::string ToString() const;
-
-    /**
-     * @brief Краткая сводка о транспортном средстве
-     * @return Краткая строка с описанием транспорта
-     */
-    virtual std::string GetSummary() const;
-
-    /**
-     * @brief Оператор сравнения базовых полей транспорта
-     * @param other Объект для сравнения
-     * @return true, если объекты равны
-     */
-    bool operator==(const Transport& other) const;
-
-    /**
-     * @brief Оператор неравенства
-     * @param other Объект для сравнения
-     * @return true, если объекты не равны
-     */
-    bool operator!=(const Transport& other) const;
+    bool operator==(const RoadTransport& other) const;
+    bool operator!=(const RoadTransport& other) const;
 };
