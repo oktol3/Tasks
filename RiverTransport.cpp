@@ -1,6 +1,7 @@
 #include "RiverTransport.h"
 
 #include <stdexcept>
+#include <typeinfo>
 #include <utility>
 
 RiverTransport::RiverTransport()
@@ -9,30 +10,30 @@ RiverTransport::RiverTransport()
 }
 
 RiverTransport::RiverTransport(const std::string& id,
-    const std::string& name,
-    const double capacityTons,
-    const double speedKmH,
-    const double ratePerTonKm,
-    const double draftMeters,
-    const double lockPassageFee)
+                               const std::string& name,
+                               const double capacityTons,
+                               const double speedKmH,
+                               const double ratePerTonKm,
+                               const double draftMeters,
+                               const double lockPassageFee)
     : Transport(id, name, capacityTons, speedKmH, ratePerTonKm),
-    draftMeters(draftMeters),
-    lockPassageFee(lockPassageFee)
+      draftMeters(draftMeters),
+      lockPassageFee(lockPassageFee)
 {
     if (this->draftMeters <= 0.0)
     {
-        throw std::invalid_argument("Осадка судна должна быть больше нуля");
+        throw std::invalid_argument("РћСЃР°РґРєР° СЃСѓРґРЅР° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
     }
     if (this->lockPassageFee < 0.0)
     {
-        throw std::invalid_argument("Сбор за шлюзование не может быть отрицательным");
+        throw std::invalid_argument("РЎР±РѕСЂ Р·Р° С€Р»СЋР·РѕРІР°РЅРёРµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
     }
 }
 
 RiverTransport::RiverTransport(const RiverTransport& other)
     : Transport(other),
-    draftMeters(other.draftMeters),
-    lockPassageFee(other.lockPassageFee)
+      draftMeters(other.draftMeters),
+      lockPassageFee(other.lockPassageFee)
 {
 }
 
@@ -49,8 +50,8 @@ RiverTransport& RiverTransport::operator=(const RiverTransport& other)
 
 RiverTransport::RiverTransport(RiverTransport&& other) noexcept
     : Transport(std::move(other)),
-    draftMeters(other.draftMeters),
-    lockPassageFee(other.lockPassageFee)
+      draftMeters(other.draftMeters),
+      lockPassageFee(other.lockPassageFee)
 {
     other.draftMeters = 0.0;
     other.lockPassageFee = 0.0;
@@ -78,7 +79,7 @@ void RiverTransport::SetDraftMeters(const double draft)
 {
     if (draft <= 0.0)
     {
-        throw std::invalid_argument("Осадка судна должна быть больше нуля");
+        throw std::invalid_argument("РћСЃР°РґРєР° СЃСѓРґРЅР° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
     }
     draftMeters = draft;
 }
@@ -92,14 +93,32 @@ void RiverTransport::SetLockPassageFee(const double fee)
 {
     if (fee < 0.0)
     {
-        throw std::invalid_argument("Сбор за шлюзование не может быть отрицательным");
+        throw std::invalid_argument("РЎР±РѕСЂ Р·Р° С€Р»СЋР·РѕРІР°РЅРёРµ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
     }
     lockPassageFee = fee;
 }
 
 std::string RiverTransport::GetTransportType() const
 {
-    return "Речной";
+    return "Р РµС‡РЅРѕР№";
+}
+
+std::unique_ptr<Transport> RiverTransport::Clone() const
+{
+    return std::make_unique<RiverTransport>(*this);
+}
+
+bool RiverTransport::Equals(const Transport& other) const
+{
+    try
+    {
+        const RiverTransport& derived = dynamic_cast<const RiverTransport&>(other);
+        return *this == derived;
+    }
+    catch (const std::bad_cast&)
+    {
+        return false;
+    }
 }
 
 double RiverTransport::CalculateDeliveryCost(const double distanceKm, const double weightTons) const
@@ -110,15 +129,15 @@ double RiverTransport::CalculateDeliveryCost(const double distanceKm, const doub
 std::string RiverTransport::ToString() const
 {
     return Transport::ToString() +
-        " | Осадка: " + FormatDouble(draftMeters) + " м" +
-        " | Шлюзовой сбор: " + FormatDouble(lockPassageFee) + " руб.";
+           " | РћСЃР°РґРєР°: " + FormatDouble(draftMeters) + " Рј" +
+           " | РЁР»СЋР·РѕРІРѕР№ СЃР±РѕСЂ: " + FormatDouble(lockPassageFee) + " СЂСѓР±.";
 }
 
 bool RiverTransport::operator==(const RiverTransport& other) const
 {
     return Transport::operator==(other) &&
-        AreEqual(draftMeters, other.draftMeters) &&
-        AreEqual(lockPassageFee, other.lockPassageFee);
+           AreEqual(draftMeters, other.draftMeters) &&
+           AreEqual(lockPassageFee, other.lockPassageFee);
 }
 
 bool RiverTransport::operator!=(const RiverTransport& other) const
