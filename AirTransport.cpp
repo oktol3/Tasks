@@ -1,6 +1,7 @@
 #include "AirTransport.h"
 
 #include <stdexcept>
+#include <typeinfo>
 #include <utility>
 
 AirTransport::AirTransport()
@@ -9,30 +10,30 @@ AirTransport::AirTransport()
 }
 
 AirTransport::AirTransport(const std::string& id,
-    const std::string& name,
-    const double capacityTons,
-    const double speedKmH,
-    const double ratePerTonKm,
-    const double maxAltitudeMeters,
-    const double airportFee)
+                           const std::string& name,
+                           const double capacityTons,
+                           const double speedKmH,
+                           const double ratePerTonKm,
+                           const double maxAltitudeMeters,
+                           const double airportFee)
     : Transport(id, name, capacityTons, speedKmH, ratePerTonKm),
-    maxAltitudeMeters(maxAltitudeMeters),
-    airportFee(airportFee)
+      maxAltitudeMeters(maxAltitudeMeters),
+      airportFee(airportFee)
 {
     if (this->maxAltitudeMeters <= 0.0)
     {
-        throw std::invalid_argument("Максимальная высота полета должна быть больше нуля");
+        throw std::invalid_argument("РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РІС‹СЃРѕС‚Р° РїРѕР»РµС‚Р° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
     }
     if (this->airportFee < 0.0)
     {
-        throw std::invalid_argument("Аэропортовый сбор не может быть отрицательным");
+        throw std::invalid_argument("РђСЌСЂРѕРїРѕСЂС‚РѕРІС‹Р№ СЃР±РѕСЂ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
     }
 }
 
 AirTransport::AirTransport(const AirTransport& other)
     : Transport(other),
-    maxAltitudeMeters(other.maxAltitudeMeters),
-    airportFee(other.airportFee)
+      maxAltitudeMeters(other.maxAltitudeMeters),
+      airportFee(other.airportFee)
 {
 }
 
@@ -49,8 +50,8 @@ AirTransport& AirTransport::operator=(const AirTransport& other)
 
 AirTransport::AirTransport(AirTransport&& other) noexcept
     : Transport(std::move(other)),
-    maxAltitudeMeters(other.maxAltitudeMeters),
-    airportFee(other.airportFee)
+      maxAltitudeMeters(other.maxAltitudeMeters),
+      airportFee(other.airportFee)
 {
     other.maxAltitudeMeters = 0.0;
     other.airportFee = 0.0;
@@ -78,7 +79,7 @@ void AirTransport::SetMaxAltitudeMeters(const double altitude)
 {
     if (altitude <= 0.0)
     {
-        throw std::invalid_argument("Максимальная высота полета должна быть больше нуля");
+        throw std::invalid_argument("РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РІС‹СЃРѕС‚Р° РїРѕР»РµС‚Р° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
     }
     maxAltitudeMeters = altitude;
 }
@@ -92,14 +93,32 @@ void AirTransport::SetAirportFee(const double fee)
 {
     if (fee < 0.0)
     {
-        throw std::invalid_argument("Аэропортовый сбор не может быть отрицательным");
+        throw std::invalid_argument("РђСЌСЂРѕРїРѕСЂС‚РѕРІС‹Р№ СЃР±РѕСЂ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
     }
     airportFee = fee;
 }
 
 std::string AirTransport::GetTransportType() const
 {
-    return "Воздушный";
+    return "Р’РѕР·РґСѓС€РЅС‹Р№";
+}
+
+std::unique_ptr<Transport> AirTransport::Clone() const
+{
+    return std::make_unique<AirTransport>(*this);
+}
+
+bool AirTransport::Equals(const Transport& other) const
+{
+    try
+    {
+        const AirTransport& derived = dynamic_cast<const AirTransport&>(other);
+        return *this == derived;
+    }
+    catch (const std::bad_cast&)
+    {
+        return false;
+    }
 }
 
 double AirTransport::CalculateDeliveryCost(const double distanceKm, const double weightTons) const
@@ -110,15 +129,15 @@ double AirTransport::CalculateDeliveryCost(const double distanceKm, const double
 std::string AirTransport::ToString() const
 {
     return Transport::ToString() +
-        " | Макс. высота: " + FormatDouble(maxAltitudeMeters) + " м" +
-        " | Аэропортовый сбор: " + FormatDouble(airportFee) + " руб.";
+           " | РњР°РєСЃ. РІС‹СЃРѕС‚Р°: " + FormatDouble(maxAltitudeMeters) + " Рј" +
+           " | РђСЌСЂРѕРїРѕСЂС‚РѕРІС‹Р№ СЃР±РѕСЂ: " + FormatDouble(airportFee) + " СЂСѓР±.";
 }
 
 bool AirTransport::operator==(const AirTransport& other) const
 {
     return Transport::operator==(other) &&
-        AreEqual(maxAltitudeMeters, other.maxAltitudeMeters) &&
-        AreEqual(airportFee, other.airportFee);
+           AreEqual(maxAltitudeMeters, other.maxAltitudeMeters) &&
+           AreEqual(airportFee, other.airportFee);
 }
 
 bool AirTransport::operator!=(const AirTransport& other) const
