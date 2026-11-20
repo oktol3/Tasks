@@ -14,7 +14,7 @@ void Transport::ValidateNonEmpty(const std::string& value, const std::string& fi
     const bool hasVisibleChar = value.find_first_not_of(" \t\n\r") != std::string::npos;
     if (!hasVisibleChar)
     {
-        throw std::invalid_argument(fieldName + " РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј");
+        throw std::invalid_argument(fieldName + " не может быть пустым");
     }
 }
 
@@ -45,7 +45,7 @@ std::string Transport::FormatDouble(const double value)
 
 Transport::Transport()
     : id("TR-0"),
-    name("РќРµ СѓРєР°Р·Р°РЅРѕ"),
+    name("Не указано"),
     capacityTons(1.0),
     speedKmH(1.0),
     ratePerTonKm(0.0)
@@ -63,19 +63,19 @@ Transport::Transport(const std::string& id,
     speedKmH(speedKmH),
     ratePerTonKm(ratePerTonKm)
 {
-    ValidateNonEmpty(this->id, "ID С‚СЂР°РЅСЃРїРѕСЂС‚Р°");
-    ValidateNonEmpty(this->name, "РќР°Р·РІР°РЅРёРµ С‚СЂР°РЅСЃРїРѕСЂС‚Р°");
+    ValidateNonEmpty(this->id, "ID транспорта");
+    ValidateNonEmpty(this->name, "Название транспорта");
     if (this->capacityTons <= 0.0)
     {
-        throw std::invalid_argument("Р“СЂСѓР·РѕРїРѕРґСЉРµРјРЅРѕСЃС‚СЊ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
+        throw std::invalid_argument("Грузоподъемность должна быть больше нуля");
     }
     if (this->speedKmH <= 0.0)
     {
-        throw std::invalid_argument("РЎРєРѕСЂРѕСЃС‚СЊ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
+        throw std::invalid_argument("Скорость должна быть больше нуля");
     }
     if (this->ratePerTonKm < 0.0)
     {
-        throw std::invalid_argument("РўР°СЂРёС„ Р·Р° С‚РѕРЅРЅРѕ-РєРёР»РѕРјРµС‚СЂ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
+        throw std::invalid_argument("Тариф за тонно-километр не может быть отрицательным");
     }
 }
 
@@ -136,7 +136,7 @@ const std::string& Transport::GetId() const
 
 void Transport::SetId(const std::string& newId)
 {
-    ValidateNonEmpty(newId, "ID С‚СЂР°РЅСЃРїРѕСЂС‚Р°");
+    ValidateNonEmpty(newId, "ID транспорта");
     id = newId;
 }
 
@@ -147,7 +147,7 @@ const std::string& Transport::GetName() const
 
 void Transport::SetName(const std::string& newName)
 {
-    ValidateNonEmpty(newName, "РќР°Р·РІР°РЅРёРµ С‚СЂР°РЅСЃРїРѕСЂС‚Р°");
+    ValidateNonEmpty(newName, "Название транспорта");
     name = newName;
 }
 
@@ -160,7 +160,7 @@ void Transport::SetCapacityTons(const double capacity)
 {
     if (capacity <= 0.0)
     {
-        throw std::invalid_argument("Р“СЂСѓР·РѕРїРѕРґСЉРµРјРЅРѕСЃС‚СЊ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
+        throw std::invalid_argument("Грузоподъемность должна быть больше нуля");
     }
     capacityTons = capacity;
 }
@@ -174,7 +174,7 @@ void Transport::SetSpeedKmH(const double speed)
 {
     if (speed <= 0.0)
     {
-        throw std::invalid_argument("РЎРєРѕСЂРѕСЃС‚СЊ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
+        throw std::invalid_argument("Скорость должна быть больше нуля");
     }
     speedKmH = speed;
 }
@@ -188,7 +188,7 @@ void Transport::SetRatePerTonKm(const double rate)
 {
     if (rate < 0.0)
     {
-        throw std::invalid_argument("РўР°СЂРёС„ Р·Р° С‚РѕРЅРЅРѕ-РєРёР»РѕРјРµС‚СЂ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹Рј");
+        throw std::invalid_argument("Тариф за тонно-километр не может быть отрицательным");
     }
     ratePerTonKm = rate;
 }
@@ -197,15 +197,15 @@ double Transport::CalculateDeliveryCost(const double distanceKm, const double we
 {
     if (distanceKm <= 0.0)
     {
-        throw std::invalid_argument("Р Р°СЃСЃС‚РѕСЏРЅРёРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
+        throw std::invalid_argument("Расстояние должно быть больше нуля");
     }
     if (weightTons <= 0.0)
     {
-        throw std::invalid_argument("РњР°СЃСЃР° РіСЂСѓР·Р° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ РЅСѓР»СЏ");
+        throw std::invalid_argument("Масса груза должна быть больше нуля");
     }
     if (weightTons > capacityTons)
     {
-        throw std::invalid_argument("РњР°СЃСЃР° РіСЂСѓР·Р° РїСЂРµРІС‹С€Р°РµС‚ РіСЂСѓР·РѕРїРѕРґСЉРµРјРЅРѕСЃС‚СЊ С‚СЂР°РЅСЃРїРѕСЂС‚Р°");
+        throw std::invalid_argument("Масса груза превышает грузоподъемность транспорта");
     }
     return distanceKm * weightTons * ratePerTonKm;
 }
@@ -214,14 +214,14 @@ std::string Transport::ToString() const
 {
     return "[" + GetTransportType() + "] " + name +
         " (ID: " + id + ")" +
-        " | Р“СЂСѓР·РѕРїРѕРґСЉРµРјРЅРѕСЃС‚СЊ: " + FormatDouble(capacityTons) + " С‚" +
-        " | РЎРєРѕСЂРѕСЃС‚СЊ: " + FormatDouble(speedKmH) + " РєРј/С‡" +
-        " | РўР°СЂРёС„: " + FormatDouble(ratePerTonKm) + " СЂСѓР±./(С‚*РєРј)";
+        " | Грузоподъемность: " + FormatDouble(capacityTons) + " т" +
+        " | Скорость: " + FormatDouble(speedKmH) + " км/ч" +
+        " | Тариф: " + FormatDouble(ratePerTonKm) + " руб./(т*км)";
 }
 
 std::string Transport::GetSummary() const
 {
-    return GetTransportType() + ": " + name + " (ID: " + id + ", РґРѕ " + FormatDouble(capacityTons) + " С‚)";
+    return GetTransportType() + ": " + name + " (ID: " + id + ", до " + FormatDouble(capacityTons) + " т)";
 }
 
 bool Transport::operator==(const Transport& other) const
